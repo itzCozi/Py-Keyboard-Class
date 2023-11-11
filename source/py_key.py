@@ -270,7 +270,7 @@ class Keyboard:
   # Helpers
 
   @staticmethod
-  def _check_count(result, func, args) -> Any:
+  def _checkCount(result, func, args) -> Any:
     if result == 0:
       raise ctypes.WinError(ctypes.get_last_error())
     return args
@@ -282,7 +282,7 @@ class Keyboard:
     else:
       return False
 
-  _Vars.user32.SendInput.errcheck = _check_count
+  _Vars.user32.SendInput.errcheck = _checkCount
   _Vars.user32.SendInput.argtypes = (
     wintypes.UINT,  # nInputs
     LPINPUT,  # pInputs

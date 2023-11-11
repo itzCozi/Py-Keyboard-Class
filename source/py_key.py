@@ -478,6 +478,7 @@ class Keyboard:
           runtime_error=f'character: {char} is not in vk_codes map'
         )
         return Keyboard._Vars.exit_code
+
       if char.isupper() or char in shift_alternate:
         Keyboard.pressKey('shift')
       else:

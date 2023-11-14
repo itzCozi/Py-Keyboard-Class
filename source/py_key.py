@@ -325,6 +325,19 @@ class Keyboard:
       dx (int, optional): The mouse's position on the x-axis
       dy (int, optional): The mouse's position on the x-axis
     """
+    if not isinstance(direction, str):
+      Keyboard._Vars.error(error_type='p', var='direction', type='string')
+      return Keyboard._Vars.exit_code
+    if not isinstance(amount, int):
+      Keyboard._Vars.error(error_type='p', var='amount', type='integer')
+      return Keyboard._Vars.exit_code
+    if not isinstance(dx, int):
+      Keyboard._Vars.error(error_type='p', var='dx', type='integer')
+      return Keyboard._Vars.exit_code
+    if not isinstance(dy, int):
+      Keyboard._Vars.error(error_type='p', var='dy', type='integer')
+      return Keyboard._Vars.exit_code
+
     direction_list: list = ['up', 'down', 'left', 'right']
     if direction not in direction_list:
       Keyboard._Vars.error(error_type='r', runtime_error='given direction is not valid')
@@ -356,6 +369,10 @@ class Keyboard:
         mouse_button
       )
     """
+    if not isinstance(mouse_button, str | int):
+      Keyboard._Vars.error(error_type='p', var='mouse_button', type='integer or string')
+      return Keyboard._Vars.exit_code
+
     mouse_list: list = [
       "left_mouse", 0x01, "right_mouse", 0x02, "middle_mouse", 0x04,
       "mouse_button1", 0x05, "mouse_button2", 0x06
@@ -393,6 +410,10 @@ class Keyboard:
         mouse_button
       )
     """
+    if not isinstance(mouse_button, str | int):
+      Keyboard._Vars.error(error_type='p', var='mouse_button', type='integer or string')
+      return Keyboard._Vars.exit_code
+
     mouse_list: list = [
       "left_mouse", 0x01, "right_mouse", 0x02, "middle_mouse", 0x04,
       "mouse_button1", 0x05, "mouse_button2", 0x06
@@ -423,6 +444,10 @@ class Keyboard:
     Args:
       key_code (str | int): All keys in vk_codes dict are valid
     """
+    if not isinstance(key_code, str | int):
+      Keyboard._Vars.error(error_type='p', var='key_code', type='integer or string')
+      return Keyboard._Vars.exit_code
+
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard.vk_codes and key_code not in Keyboard.vk_codes.values():
@@ -443,6 +468,10 @@ class Keyboard:
     Args:
       key_code (str | int): All keys in vk_codes dict are valid
     """
+    if not isinstance(key_code, str | int):
+      Keyboard._Vars.error(error_type='p', var='key_code', type='integer or string')
+      return Keyboard._Vars.exit_code
+
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard.vk_codes and key_code not in Keyboard.vk_codes.values():
@@ -466,6 +495,10 @@ class Keyboard:
     Args:
       key_code (str | int): All keys in vk_codes dict are valid
     """
+    if not isinstance(key_code, str | int):
+      Keyboard._Vars.error(error_type='p', var='key_code', type='integer or string')
+      return Keyboard._Vars.exit_code
+
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard.vk_codes and key_code not in Keyboard.vk_codes.values():
@@ -473,7 +506,6 @@ class Keyboard:
       return Keyboard._Vars.exit_code
 
     Keyboard.pressKey(key_code)
-    time.sleep(0.25)
     Keyboard.releaseKey(key_code)
 
   @staticmethod
@@ -490,6 +522,10 @@ class Keyboard:
         mouse_button
       )
     """
+    if not isinstance(mouse_button, str | int):
+      Keyboard._Vars.error(error_type='p', var='mouse_button', type='integer or string')
+      return Keyboard._Vars.exit_code
+
     mouse_list: list = [
       "left_mouse", 0x01, "right_mouse", 0x02, "middle_mouse", 0x04,
       "mouse_button1", 0x05, "mouse_button2", 0x06
@@ -506,18 +542,22 @@ class Keyboard:
       return Keyboard._Vars.exit_code
 
     Keyboard.pressMouse(original_name)
-    time.sleep(0.25)
     Keyboard.releaseMouse(original_name)
 
   @staticmethod
-  def keyboardWrite(string: str) -> None:
+  def keyboardWrite(source_str: str) -> None:
     """
     Writes by sending virtual inputs
 
     Args:
-      string (str): All keys in the 'Alphanumerical' section of vk_codes dict are valid
+      source_str (str): The string to be inputted on the keyboard, all 
+      keys in the 'Alphanumerical' section of vk_codes dict are valid
     """
-    str_list: list = list(string)
+    if not isinstance(source_str, str):
+      Keyboard._Vars.error(error_type='p', var='string', type='string')
+      return Keyboard._Vars.exit_code
+
+    str_list: list = list(source_str)
     shift_alternate: list = [
       '|', '~', '?', ':', '{', '}', '\"', '!', '@', '#', '$', '%', '^', '&',
       '*', '(', ')', '+', '<', '>', '_'
@@ -557,6 +597,8 @@ class Keyboard:
     """
     My development test function, just opens alt-tab menu
     """
+    # Here we use the value of alt and tab, so we can 
+    # test if the functions still take VK codes directly
     Keyboard.pressKey(Keyboard.vk_codes['alt'])
     Keyboard.pressKey(Keyboard.vk_codes['tab'])
     Keyboard.releaseKey(Keyboard.vk_codes['tab'])

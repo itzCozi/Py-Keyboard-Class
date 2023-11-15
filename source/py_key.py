@@ -8,6 +8,15 @@ import win32api
 from win32con import *
 from typing import Any
 from ctypes import wintypes
+from win32api import STD_INPUT_HANDLE
+from win32console import (
+  GetStdHandle,
+  KEY_EVENT,
+  ENABLE_ECHO_INPUT,
+  ENABLE_LINE_INPUT,
+  ENABLE_PROCESSED_INPUT
+)
+
 
 # CODE
 '''
@@ -291,9 +300,9 @@ class Keyboard:
 
   @staticmethod
   def MOUSESCROLL(
-    axis: str, 
-    dist: int, 
-    x: int = 0, 
+    axis: str,
+    dist: int,
+    x: int = 0,
     y: int = 0
   ) -> None | bool:
     if axis == 'v' or axis == 'vertical':
@@ -302,6 +311,62 @@ class Keyboard:
       win32api.mouse_event(MOUSEEVENTF_HWHEEL, x, y, dist, 0)
     else:
       return False
+
+  class GetKeystroke:
+    """
+    A wrapper that returns the key pressed
+
+    Example:
+      with KeyPoller() as keyPoller:
+        while True:
+          key = keyPoller.poll()
+          if key is not None:
+            if key == "c": break
+            print(key)
+
+    Returns:
+      str: The key pressed after calling the class
+    """
+    # TODO: Add static type hinting
+
+    def __enter__(self):
+      self.readHandle = GetStdHandle(STD_INPUT_HANDLE)
+      self.readHandle.SetConsoleMode(
+        ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT
+      )
+
+      self.curEventLength = 0
+      self.curKeysLength = 0
+      self.capturedChars = []
+
+      return self
+
+    def __exit__(self, type, value, traceback):
+      pass
+
+    def poll(self):
+      if not len(self.capturedChars) == 0:
+        return self.capturedChars.pop(0)
+
+      events_peek = self.readHandle.PeekConsoleInput(10000)
+
+      if len(events_peek) == 0:
+        return None
+
+      if not len(events_peek) == self.curEventLength:
+        for curEvent in events_peek[self.curEventLength:]:
+          if curEvent.EventType == KEY_EVENT:
+            if ord(curEvent.Char) == 0 or not curEvent.KeyDown:
+              pass
+            else:
+              cur_char = str(curEvent.Char)
+              self.capturedChars.append(cur_char)
+        self.curEventLength = len(events_peek)
+
+      if not len(self.capturedChars) == 0:
+        return self.capturedChars.pop(0)
+      else:
+        return None
 
   _Vars.user32.SendInput.errcheck = _checkCount
   _Vars.user32.SendInput.argtypes = (
@@ -550,7 +615,7 @@ class Keyboard:
     Writes by sending virtual inputs
 
     Args:
-      source_str (str): The string to be inputted on the keyboard, all 
+      source_str (str): The string to be inputted on the keyboard, all
       keys in the 'Alphanumerical' section of vk_codes dict are valid
     """
     if not isinstance(source_str, str):
@@ -597,7 +662,7 @@ class Keyboard:
     """
     My development test function, just opens alt-tab menu
     """
-    # Here we use the value of alt and tab, so we can 
+    # Here we use the value of alt and tab, so we can
     # test if the functions still take VK codes directly
     Keyboard.pressKey(Keyboard.vk_codes['alt'])
     Keyboard.pressKey(Keyboard.vk_codes['tab'])

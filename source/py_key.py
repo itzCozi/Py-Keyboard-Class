@@ -320,11 +320,8 @@ class Keyboard:
     Returns:
       str: The key pressed after calling the class
     """
-
-    # TODO: Add static type hinting
-
     def __enter__(self) -> Any:
-      self.readHandle = GetStdHandle(STD_INPUT_HANDLE)
+      self.readHandle: Any = GetStdHandle(STD_INPUT_HANDLE)
       self.readHandle.SetConsoleMode(
         ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT
       )  # Set terminal flags/mode
@@ -339,10 +336,10 @@ class Keyboard:
       pass
 
     # Main function
-    def poll(self) -> str:
+    def poll(self) -> str | None:
       if not len(self.captured_chars) == 0:
         return self.captured_chars.pop(0)
-      events_peek = self.readHandle.PeekConsoleInput(10000)
+      events_peek: tuple = self.readHandle.PeekConsoleInput(10000)
 
       if len(events_peek) == 0:
         return None
@@ -359,10 +356,10 @@ class Keyboard:
 
         self.cur_event_len: int = len(events_peek)
       if not len(self.captured_chars) == 0:
-        return self.captured_chars.pop(0)
+        return self.captured_chars.pop()  # Return the last item in the list
 
-  _Vars.user32.SendInput.errcheck = _checkCount
-  _Vars.user32.SendInput.argtypes = (
+  _Vars.user32.SendInput.errcheck: Any = _checkCount
+  _Vars.user32.SendInput.argtypes: Any = (
     wintypes.UINT,  # nInputs
     LPINPUT,  # pInputs
     ctypes.c_int  # cbSize

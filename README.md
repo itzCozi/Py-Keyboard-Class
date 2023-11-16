@@ -6,6 +6,9 @@ A class used for handling inputs via VK codes and win32 API moved from Helper/cu
 ![main class doc-string](ignore/keyboard-doc-string.png 'Keyboard class doc-string')  
 Keyboard class doc-string
 
+![Keyboard input class](ignore/input-class.png 'class for Keyboard input')  
+Main Keyboard input class
+
 
 ## Code Rules
 * All variable declarations must be type hinted EX: num: int = 0

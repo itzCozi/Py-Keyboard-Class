@@ -36,7 +36,9 @@ functions doc-string EX: output_path (str, optional)
 
 # TODO
 '''
-* Add isinstance to all functions
+* Look over all functions
+* Add the Keyboard doc-string and other 
+things to the README.md
 '''
 
 

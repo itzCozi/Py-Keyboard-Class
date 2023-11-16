@@ -10,13 +10,9 @@ from typing import Any
 from ctypes import wintypes
 from win32api import STD_INPUT_HANDLE
 from win32console import (
-  GetStdHandle,
-  KEY_EVENT,
-  ENABLE_ECHO_INPUT,
-  ENABLE_LINE_INPUT,
-  ENABLE_PROCESSED_INPUT
+  GetStdHandle, KEY_EVENT, ENABLE_ECHO_INPUT,
+  ENABLE_LINE_INPUT, ENABLE_PROCESSED_INPUT
 )
-
 
 # CODE
 '''
@@ -44,20 +40,22 @@ things to the README.md
 
 class Keyboard:
   """
-  A class for controlling and sending keystrokes
+  A class for receiving and sending keystrokes/mouse inputs
 
-  -----------------------------------------
-  |    function            description    |
-  |---------------------------------------|
-  | scrollMouse: Scrolls the mouse wheel  |
-  | pressMouse: Sends a VK input to mouse |
-  | releaseMouse: Halt VK signal          |
-  | pressKey: Presses given key hex code  |
-  | releaseKey: Stop given VK input       |
-  | pressAndReleaseKey: N/A               |
-  | pressAndReleaseMouse: N/A             |
-  | keyboardWrite: Sends vk inputs        |
-  -----------------------------------------
+  --------------------------------------------------
+  |          function         description          |
+  |------------------------------------------------|
+  | class  GetKeystroke: A key poller wrapper      |
+  | func   mouse_scroll: Bare bones mouse scroller |
+  | func   scrollMouse: Scrolls the mouse wheel    |
+  | func   pressMouse: Sends a VK input to mouse   |
+  | func   releaseMouse: Halt VK signal            |
+  | func   pressKey: Presses given key hex code    |
+  | func   releaseKey: Stop given VK input         |
+  | func   pressAndReleaseKey: N/A                 |
+  | func   pressAndReleaseMouse: N/A               |
+  | func   keyboardWrite: Sends vk inputs          |
+  --------------------------------------------------
   """
 
   class _Vars:  # Variable container
@@ -77,7 +75,7 @@ class Keyboard:
         print('UNKNOWN: An unknown error was encountered.')
       return None
 
-    exit_code = None
+    exit_code: None = None
     INPUT_MOUSE: int = 0
     INPUT_KEYBOARD: int = 1
     MAPVK_VK_TO_VSC: int = 0
@@ -301,12 +299,7 @@ class Keyboard:
       return False
 
   @staticmethod
-  def MOUSESCROLL(
-    axis: str,
-    dist: int,
-    x: int = 0,
-    y: int = 0
-  ) -> None | bool:
+  def mouse_scroll(axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
     if axis == 'v' or axis == 'vertical':
       win32api.mouse_event(MOUSEEVENTF_WHEEL, x, y, dist, 0)
     elif axis == 'h' or axis == 'horizontal':
@@ -321,7 +314,7 @@ class Keyboard:
     Example:
       with KeyPoller() as keyPoller:
         while True:
-          key = keyPoller.poll()
+          key: str = keyPoller.poll()
           if key is not None:
             if key == "c": break
             print(key)
@@ -329,46 +322,46 @@ class Keyboard:
     Returns:
       str: The key pressed after calling the class
     """
+
     # TODO: Add static type hinting
 
-    def __enter__(self):
+    def __enter__(self) -> Any:
       self.readHandle = GetStdHandle(STD_INPUT_HANDLE)
       self.readHandle.SetConsoleMode(
         ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT
-      )
+      )  # Set terminal flags/mode
 
-      self.curEventLength = 0
-      self.curKeysLength = 0
-      self.capturedChars = []
+      self.cur_event_len: int = 0
+      self.cur_keys_len: int = 0
+      self.captured_chars: list = []
 
       return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type, value, traceback) -> None:
       pass
 
-    def poll(self):
-      if not len(self.capturedChars) == 0:
-        return self.capturedChars.pop(0)
-
+    # Main function
+    def poll(self) -> str:
+      if not len(self.captured_chars) == 0:
+        return self.captured_chars.pop(0)
       events_peek = self.readHandle.PeekConsoleInput(10000)
 
       if len(events_peek) == 0:
         return None
 
-      if not len(events_peek) == self.curEventLength:
-        for curEvent in events_peek[self.curEventLength:]:
-          if curEvent.EventType == KEY_EVENT:
-            if ord(curEvent.Char) == 0 or not curEvent.KeyDown:
+      if not len(events_peek) == self.cur_event_len:
+
+        for cur_event in events_peek[self.cur_event_len:]:
+          if cur_event.EventType == KEY_EVENT:
+            if ord(cur_event.Char) == 0 or not cur_event.KeyDown:
               pass
             else:
-              cur_char = str(curEvent.Char)
-              self.capturedChars.append(cur_char)
-        self.curEventLength = len(events_peek)
+              cur_char: str = str(cur_event.Char)
+              self.captured_chars.append(cur_char)
 
-      if not len(self.capturedChars) == 0:
-        return self.capturedChars.pop(0)
-      else:
-        return None
+        self.cur_event_len: int = len(events_peek)
+      if not len(self.captured_chars) == 0:
+        return self.captured_chars.pop(0)
 
   _Vars.user32.SendInput.errcheck = _checkCount
   _Vars.user32.SendInput.argtypes = (
@@ -414,13 +407,13 @@ class Keyboard:
       return Keyboard._Vars.exit_code
 
     if direction == 'up':
-      Keyboard.MOUSESCROLL('vertical', amount, dx, dy)
+      Keyboard.mouse_scroll('vertical', amount, dx, dy)
     elif direction == 'down':
-      Keyboard.MOUSESCROLL('vertical', -amount, dx, dy)
+      Keyboard.mouse_scroll('vertical', -amount, dx, dy)
     elif direction == 'right':
-      Keyboard.MOUSESCROLL('horizontal', amount, dx, dy)
+      Keyboard.mouse_scroll('horizontal', amount, dx, dy)
     elif direction == 'left':
-      Keyboard.MOUSESCROLL('horizontal', -amount, dx, dy)
+      Keyboard.mouse_scroll('horizontal', -amount, dx, dy)
 
   @staticmethod
   def pressMouse(mouse_button: str | int) -> None:

@@ -266,8 +266,6 @@ class Keyboard:
 
     def __init__(self, *args, **kwds) -> None:
       super(KEYBDINPUT, self).__init__(*args, **kwds)
-      # some programs use the scan code even if KEYEVENTF_SCANCODE
-      # isn't set in dwFflags, so try to map the right code
       if not self.dwFlags & Keyboard._Vars.KEYEVENTF_UNICODE:
         self.wScan = Keyboard._Vars.user32.MapVirtualKeyExW(
           self.wVk, Keyboard._Vars.MAPVK_VK_TO_VSC, 0

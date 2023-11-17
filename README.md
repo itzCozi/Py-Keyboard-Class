@@ -7,7 +7,7 @@ A class used for handling inputs via VK codes and win32 API moved from Helper/cu
 Keyboard class doc-string
 
 ![Keyboard input class](ignore/input-class.png 'class for Keyboard input')  
-Main Keyboard input class
+Main Keyboard input class (before static type hinting was added)
 
 
 ## Code Rules
@@ -22,3 +22,14 @@ Main Keyboard input class
 * If a variable or function uses more than one type use EX: num: int | float = 0.1
 * When outputting a message like info or an error end the print statement with a period
 * Make sure optional parameters are specifed in the functions doc-string EX: output_path (str, optional)
+
+
+## Extra 
+[Source](https://github.com/itzCozi/Py-Keyboard-Class/blob/main/source/py_key.py)  
+[Compiler](https://pypi.org/project/auto-py-to-exe/)  
+
+
+### Contact Me
+Discord: .baddeveloper  
+Email: Cooperransom08@outlook.com  
+[Discord Server](https://discord.gg/xGnQQGxwq2)  |  [Replit](https://replit.com/@cozi08)  |  [Twitter](https://twitter.com/ransom_cooper)

@@ -5,8 +5,8 @@
 import time
 import ctypes
 import win32api
+from typing import *
 from win32con import *
-from typing import Any
 from ctypes import wintypes
 from win32api import STD_INPUT_HANDLE
 from win32console import (
@@ -32,9 +32,8 @@ functions doc-string EX: output_path (str, optional)
 
 # TODO
 '''
-* Look over all functions
-* Add the Keyboard doc-string and other 
-things to the README.md
+* Look over all functions, still...
+* Keep adding thing to README.md
 '''
 
 
@@ -46,7 +45,7 @@ class Keyboard:
   |          function         description          |
   |------------------------------------------------|
   | class  GetKeystroke: A key poller wrapper      |
-  | func   mouse_scroll: Bare bones mouse scroller |
+  | func   _MOUSESCROLL: Bare-bones mouse scroller |
   | func   scrollMouse: Scrolls the mouse wheel    |
   | func   pressMouse: Sends a VK input to mouse   |
   | func   releaseMouse: Halt VK signal            |
@@ -241,45 +240,65 @@ class Keyboard:
     "\n": 0x0D
   }
 
-  # C struct declarations, these are not statically type hinted
-  wintypes.ULONG_PTR = wintypes.WPARAM
+  # C struct declarations, recently added type hinting
+  wintypes.ULONG_PTR: type[wintypes.WPARAM] = wintypes.WPARAM
   global MOUSEINPUT, KEYBDINPUT
 
   class MOUSEINPUT(ctypes.Structure):
-    _fields_ = (
-      ('dx', wintypes.LONG),
-      ('dy', wintypes.LONG),
-      ('mouseData', wintypes.DWORD),
-      ('dwFlags', wintypes.DWORD),
-      ('time', wintypes.DWORD),
-      ('dwExtraInfo', wintypes.ULONG_PTR)
+    _fields_: tuple[
+      tuple[Literal['dx'], wintypes.LONG],                  # A
+      tuple[Literal['dy'], wintypes.LONG],                  # B
+      tuple[Literal['mouseData'], wintypes.DWORD],          # C
+      tuple[Literal['dwFlags'], wintypes.DWORD],            # D
+      tuple[Literal['time'], wintypes.DWORD],               # E
+      tuple[Literal['dwExtraInfo'], type[wintypes.WPARAM]]  # F
+    ] = (
+      ('dx', wintypes.LONG),                                # A
+      ('dy', wintypes.LONG),                                # B
+      ('mouseData', wintypes.DWORD),                        # C
+      ('dwFlags', wintypes.DWORD),                          # D
+      ('time', wintypes.DWORD),                             # E
+      ('dwExtraInfo', wintypes.ULONG_PTR)                   # F
     )
 
   class KEYBDINPUT(ctypes.Structure):
-    _fields_ = (
-      ('wVk', wintypes.WORD),
-      ('wScan', wintypes.WORD),
-      ('dwFlags', wintypes.DWORD),
-      ('time', wintypes.DWORD),
-      ('dwExtraInfo', wintypes.ULONG_PTR)
+    _fields_: tuple[
+      tuple[Literal['wVk'], wintypes.WORD],                 # A
+      tuple[Literal['wScan'], wintypes.WORD],               # B
+      tuple[Literal['dwFlags'], wintypes.DWORD],            # C
+      tuple[Literal['time'], wintypes.DWORD],               # D
+      tuple[Literal['dwExtraInfo'], type[wintypes.WPARAM]]  # E
+    ] = (
+      ('wVk', wintypes.WORD),                               # A
+      ('wScan', wintypes.WORD),                             # B
+      ('dwFlags', wintypes.DWORD),                          # C
+      ('time', wintypes.DWORD),                             # D
+      ('dwExtraInfo', wintypes.ULONG_PTR)                   # E
     )
 
     def __init__(self, *args, **kwds) -> None:
+      # *args & **kwds are confusing asf: https://youtu.be/4jBJhCaNrWU?si=0zZQqGuMaR5ulLNb
       super(KEYBDINPUT, self).__init__(*args, **kwds)
       if not self.dwFlags & Keyboard._Vars.KEYEVENTF_UNICODE:
-        self.wScan = Keyboard._Vars.user32.MapVirtualKeyExW(
+        self.wScan: Any = Keyboard._Vars.user32.MapVirtualKeyExW(
           self.wVk, Keyboard._Vars.MAPVK_VK_TO_VSC, 0
         )
 
   class INPUT(ctypes.Structure):
 
     class _INPUT(ctypes.Union):
-      _fields_ = (('ki', KEYBDINPUT), ('mi', MOUSEINPUT))
+      _fields_: tuple[
+        tuple[Literal['ki'], type[KEYBDINPUT]], 
+        tuple[Literal['mi'], type[MOUSEINPUT]]
+      ] = (('ki', KEYBDINPUT), ('mi', MOUSEINPUT))
 
-    _anonymous_ = ('_input', )
-    _fields_ = (('type', wintypes.DWORD), ('_input', _INPUT))
+    _anonymous_: tuple[Literal['_input']] = ('_input', )
+    _fields_: tuple[
+      tuple[Literal['type'], wintypes.DWORD], 
+      tuple[Literal['_input'], type[_INPUT]]
+    ] = (('type', wintypes.DWORD), ('_input', _INPUT))
 
-  LPINPUT = ctypes.POINTER(INPUT)
+  LPINPUT: Any = ctypes.POINTER(INPUT)
 
   # Helpers
 
@@ -297,7 +316,7 @@ class Keyboard:
       return False
 
   @staticmethod
-  def mouse_scroll(axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
+  def _MOUSESCROLL(axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
     if axis == 'v' or axis == 'vertical':
       win32api.mouse_event(MOUSEEVENTF_WHEEL, x, y, dist, 0)
     elif axis == 'h' or axis == 'horizontal':
@@ -320,6 +339,10 @@ class Keyboard:
     Returns:
       str: The key pressed after calling the class
     """
+
+    def __init__(self) -> None:
+      self.cur_event_len: None | int = None
+
     def __enter__(self) -> Any:
       self.readHandle: Any = GetStdHandle(STD_INPUT_HANDLE)
       self.readHandle.SetConsoleMode(
@@ -402,13 +425,13 @@ class Keyboard:
       return Keyboard._Vars.exit_code
 
     if direction == 'up':
-      Keyboard.mouse_scroll('vertical', amount, dx, dy)
+      Keyboard._MOUSESCROLL('vertical', amount, dx, dy)
     elif direction == 'down':
-      Keyboard.mouse_scroll('vertical', -amount, dx, dy)
+      Keyboard._MOUSESCROLL('vertical', -amount, dx, dy)
     elif direction == 'right':
-      Keyboard.mouse_scroll('horizontal', amount, dx, dy)
+      Keyboard._MOUSESCROLL('horizontal', amount, dx, dy)
     elif direction == 'left':
-      Keyboard.mouse_scroll('horizontal', -amount, dx, dy)
+      Keyboard._MOUSESCROLL('horizontal', -amount, dx, dy)
 
   @staticmethod
   def pressMouse(mouse_button: str | int) -> None:

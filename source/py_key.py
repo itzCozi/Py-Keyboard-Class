@@ -276,7 +276,11 @@ class Keyboard:
       ('dwExtraInfo', wintypes.ULONG_PTR)                   # E
     )
 
-    def __init__(self, *args, **kwds) -> None:
+    def __init__(
+      self: Self,
+      *args: tuple[Any, ...],
+      **kwds: dict[str, Any]
+    ) -> None:
       # *args & **kwds are confusing asf: https://youtu.be/4jBJhCaNrWU?si=0zZQqGuMaR5ulLNb
       super(KEYBDINPUT, self).__init__(*args, **kwds)
       if not self.dwFlags & Keyboard._Vars.KEYEVENTF_UNICODE:
@@ -303,13 +307,13 @@ class Keyboard:
   # Helpers
 
   @staticmethod
-  def _checkCount(result, func, args) -> Any:
+  def _checkCount(result: Any, func: Any, args: Any) -> Any:
     if result == 0:
       raise ctypes.WinError(ctypes.get_last_error())
     return args
 
   @staticmethod
-  def _lookup(key) -> int | bool:
+  def _lookup(key: Any) -> int | bool:
     if key in Keyboard.vk_codes:
       return Keyboard.vk_codes.get(key)
     else:
@@ -340,10 +344,10 @@ class Keyboard:
       str: The key pressed after calling the class
     """
 
-    def __init__(self) -> None:
+    def __init__(self: Self) -> None:
       self.cur_event_len: None | int = None
 
-    def __enter__(self) -> Any:
+    def __enter__(self: Self) -> Any:
       self.readHandle: Any = GetStdHandle(STD_INPUT_HANDLE)
       self.readHandle.SetConsoleMode(
         ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT
@@ -355,11 +359,16 @@ class Keyboard:
 
       return self
 
-    def __exit__(self, type, value, traceback) -> None:
+    def __exit__(
+      self: Self,
+      type: Any,
+      value: Any,
+      traceback: Any
+    ) -> None:
       pass
 
     # Main function
-    def poll(self) -> str | None:
+    def poll(self: Self) -> str | None:
       if not len(self.captured_chars) == 0:
         return self.captured_chars.pop(0)
       events_peek: tuple = self.readHandle.PeekConsoleInput(10000)

@@ -400,7 +400,7 @@ class Keyboard:
   # Functions (most people will only use these)
 
   @staticmethod
-  def getKeyState(key_code: str | int) -> int:
+  def getKeyState(key_code: str | int) -> bool:
     """
     Returns the given keys current state
 
@@ -408,7 +408,7 @@ class Keyboard:
       key_code (str | int): The key to be checked for state
 
     Returns:
-      int: '0' if the key is not pressed and '1' if it is
+      bool: 'False' if the key is not pressed and 'True' if it is
     """
     if not isinstance(key_code, str | int):
       Keyboard._Vars.error(error_type='p', var='key_code', type='integer or string')
@@ -420,7 +420,19 @@ class Keyboard:
       Keyboard._Vars.error(error_type='r', runtime_error='given key code is not valid')
       return Keyboard._Vars.exit_code
 
-    return Keyboard._Vars.user32.GetKeyState(key_code)
+    integer_state: int = Keyboard._Vars.user32.GetKeyState(key_code)
+    if integer_state == 1:
+      key_state: bool = True
+    else:
+      key_state: bool = False
+
+    if 'key_state' in locals():
+      return key_state
+    else:
+      Keyboard._Vars.error(
+        error_type='r', runtime_error='user32 returned a non "1" or "0" value'
+      )
+      return Keyboard._Vars.exit_code
 
   @staticmethod
   def scrollMouse(direction: str, amount: int, dx: int = 0, dy: int = 0) -> None:

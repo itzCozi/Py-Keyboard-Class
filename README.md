@@ -11,8 +11,8 @@ Main Keyboard input class (before static type hinting was added)
 
 
 ## Code Rules
-* All variable declarations must be type hinted EX: num: int = 0
 * All paths use '/' to separate dirs instead of '\' like windows
+* All variable declarations must be type hinted EX: num: int = 0
 * All classes and functions use CamelCase variables use snake_case
 * If a function has parameters each variable must have specified types
 * When assigning parameters in functions dont use spaces between equals sign

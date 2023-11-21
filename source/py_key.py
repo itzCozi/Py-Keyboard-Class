@@ -46,6 +46,7 @@ class Keyboard:
   |------------------------------------------------|
   | class  GetKeystroke: A key poller wrapper      |
   | func   _MOUSESCROLL: Bare-bones mouse scroller |
+  | func   getKeyState: Returns given key's state  |
   | func   scrollMouse: Scrolls the mouse wheel    |
   | func   pressMouse: Sends a VK input to mouse   |
   | func   releaseMouse: Halt VK signal            |

@@ -33,7 +33,9 @@ functions doc-string EX: output_path (str, optional)
 # TODO
 '''
 * Look over all functions, still...
-* Keep adding thing to README.md
+* Make sure doc-string up to date
+* Add a move the mouse Into a certain point 
+Or like a certain coordinate function
 '''
 
 

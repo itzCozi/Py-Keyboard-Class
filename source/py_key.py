@@ -331,6 +331,11 @@ class Keyboard:
     else:
       return False
 
+  class MousePosition:
+
+    def getMousePosition() -> tuple:
+      return ctypes.windll.user32.GetCursorPos()
+
   class GetKeystroke:
     """
     A wrapper that returns the key pressed
@@ -403,7 +408,7 @@ class Keyboard:
   # Functions (most people will only use these)
 
   @staticmethod
-  def moveMouse(x: int, y: int):
+  def moveCursor(x: int, y: int):
     """
     Moves the cursor to a specific coordinate on the screen.
 
@@ -411,6 +416,8 @@ class Keyboard:
       x (int): The x-coordinate to be sent to user32
       y (int): The y-coordinate to be sent to user32
     """
+    # ChatGPT says SetCursorPos takes the absoulte x,y
+    # not the relative distance between the points
     if not isinstance(x, int):
       Keyboard._Vars.error(error_type='p', var='x', type='integer')
       return Keyboard._Vars.exit_code

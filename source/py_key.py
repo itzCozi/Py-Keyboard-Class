@@ -403,29 +403,25 @@ class Keyboard:
   # Functions (most people will only use these)
 
   @staticmethod
-  def move_mouse_cursor(x: int, y: int):
-    # TODO: Need to improve this function
+  def moveMouse(x: int, y: int):
     """
-    Function to move the mouse cursor to a specific position on the screen.
- 
-    Parameters:
-    - x: int
-        The x-coordinate of the target position.
-    - y: int
-        The y-coordinate of the target position.
+    Moves the cursor to a specific coordinate on the screen.
+
+    Args:
+      x (int): The x-coordinate to be sent to user32
+      y (int): The y-coordinate to be sent to user32
     """
- 
-    # Getting the current position of the mouse cursor
+    if not isinstance(x, int):
+      Keyboard._Vars.error(error_type='p', var='x', type='integer')
+      return Keyboard._Vars.exit_code
+    if not isinstance(y, int):
+      Keyboard._Vars.error(error_type='p', var='y', type='integer')
+      return Keyboard._Vars.exit_code
+
     current_pos = ctypes.windll.user32.GetCursorPos()
- 
-    # Calculating the distance to move the cursor
     dx = x - current_pos[0]
     dy = y - current_pos[1]
- 
-    # Moving the cursor to the target position
-    ctypes.windll.user32.SetCursorPos(x, y)
- 
-    # Sleeping for a short duration to allow the cursor to move
+    ctypes.windll.user32.SetCursorPos(dx, dy)
     time.sleep(0.1)
 
   @staticmethod

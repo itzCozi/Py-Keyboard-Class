@@ -403,6 +403,32 @@ class Keyboard:
   # Functions (most people will only use these)
 
   @staticmethod
+  def move_mouse_cursor(x: int, y: int):
+    # TODO: Need to improve this function
+    """
+    Function to move the mouse cursor to a specific position on the screen.
+ 
+    Parameters:
+    - x: int
+        The x-coordinate of the target position.
+    - y: int
+        The y-coordinate of the target position.
+    """
+ 
+    # Getting the current position of the mouse cursor
+    current_pos = ctypes.windll.user32.GetCursorPos()
+ 
+    # Calculating the distance to move the cursor
+    dx = x - current_pos[0]
+    dy = y - current_pos[1]
+ 
+    # Moving the cursor to the target position
+    ctypes.windll.user32.SetCursorPos(x, y)
+ 
+    # Sleeping for a short duration to allow the cursor to move
+    time.sleep(0.1)
+
+  @staticmethod
   def getKeyState(key_code: str | int) -> bool:
     """
     Returns the given keys current state

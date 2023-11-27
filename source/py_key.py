@@ -48,6 +48,7 @@ class Keyboard:
   |------------------------------------------------|
   | class  GetKeystroke: A key poller wrapper      |
   | func   _MOUSESCROLL: Bare-bones mouse scroller |
+  | func   moveCursor: ........
   | func   getKeyState: Returns given key's state  |
   | func   scrollMouse: Scrolls the mouse wheel    |
   | func   pressMouse: Sends a VK input to mouse   |
@@ -307,7 +308,7 @@ class Keyboard:
 
   LPINPUT: Any = ctypes.POINTER(INPUT)
 
-  # Helpers
+  # Helpers / Bare-bones implementation
 
   @staticmethod
   def _checkCount(result: Any, func: Any, args: Any) -> Any:
@@ -331,10 +332,19 @@ class Keyboard:
     else:
       return False
 
-  class MousePosition:
+  class ManipulateMouse:
+    """
+    A simple class to control the mouse cursor
 
-    def getMousePosition() -> tuple:
+    Functions:
+      getPosition(): Returns a tuple with the cursor's current position
+      setPosition(x, y): Moves the cursor to the given x and y coordinates
+    """
+    def getPosition() -> tuple:
       return ctypes.windll.user32.GetCursorPos()
+
+    def setPosition(x: int, y: int) -> None:
+      ctypes.windll.user32.SetCursorPos(x, y)
 
   class GetKeystroke:
     """
@@ -425,16 +435,16 @@ class Keyboard:
       Keyboard._Vars.error(error_type='p', var='y', type='integer')
       return Keyboard._Vars.exit_code
 
-    current_pos = ctypes.windll.user32.GetCursorPos()
+    current_pos = Keyboard.ManipulateMouse.getPosition()
     dx = x - current_pos[0]
     dy = y - current_pos[1]
-    ctypes.windll.user32.SetCursorPos(dx, dy)
+    Keyboard.ManipulateMouse.setPosition(dx, dy)
     time.sleep(0.1)
 
   @staticmethod
   def getKeyState(key_code: str | int) -> bool:
     """
-    Returns the given keys current state
+    Returns the given key's current state
 
     Args:
       key_code (str | int): The key to be checked for state

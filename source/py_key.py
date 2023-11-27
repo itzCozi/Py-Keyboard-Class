@@ -32,8 +32,7 @@ functions doc-string EX: output_path (str, optional)
 
 # TODO
 '''
-* Look over all functions, still...
-* Make sure doc-string up to date
+* Look over all functions, still... 
 * Add a move the mouse Into a certain point 
 Or like a certain coordinate function
 '''
@@ -46,9 +45,9 @@ class Keyboard:
   --------------------------------------------------
   |          function         description          |
   |------------------------------------------------|
+  | class   moveCursor: Moves cursor to a position |
   | class  GetKeystroke: A key poller wrapper      |
   | func   _MOUSESCROLL: Bare-bones mouse scroller |
-  | func   moveCursor: ........
   | func   getKeyState: Returns given key's state  |
   | func   scrollMouse: Scrolls the mouse wheel    |
   | func   pressMouse: Sends a VK input to mouse   |
@@ -341,10 +340,10 @@ class Keyboard:
       setPosition(x, y): Moves the cursor to the given x and y coordinates
     """
     def getPosition() -> tuple:
-      return ctypes.windll.user32.GetCursorPos()
+      return Keyboard._Vars.user32.GetCursorPos()
 
     def setPosition(x: int, y: int) -> None:
-      ctypes.windll.user32.SetCursorPos(x, y)
+      Keyboard._Vars.user32.SetCursorPos(x, y)
 
   class GetKeystroke:
     """
@@ -418,7 +417,7 @@ class Keyboard:
   # Functions (most people will only use these)
 
   @staticmethod
-  def moveCursor(x: int, y: int):
+  def moveCursor(x: int, y: int) -> None:
     """
     Moves the cursor to a specific coordinate on the screen.
 

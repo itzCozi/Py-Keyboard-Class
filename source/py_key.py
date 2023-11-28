@@ -32,9 +32,8 @@ functions doc-string EX: output_path (str, optional)
 
 # TODO
 '''
-* Look over all functions, still... 
-* Add a move the mouse Into a certain point 
-Or like a certain coordinate function
+* Put everything in PyCharm
+* Also look at: https://blog.devgenius.io/my-top-5-favorite-pycharm-plugins-89bea03c8200
 '''
 
 
@@ -47,7 +46,7 @@ class Keyboard:
   |------------------------------------------------|
   | class  moveCursor: Moves cursor to a position  |
   | class  GetKeystroke: A key poller wrapper      |
-  | func   _MOUSESCROLL: Bare-bones mouse scroller |
+  | func   mouseScroll: Bare-bones mouse scroller  |
   | func   getKeyState: Returns given key's state  |
   | func   scrollMouse: Scrolls the mouse wheel    |
   | func   pressMouse: Sends a VK input to mouse   |
@@ -60,8 +59,10 @@ class Keyboard:
   --------------------------------------------------
   """
 
-  class _Vars:  # Variable container
-
+  class _Vars:
+    """
+    Keyboard class's variable container
+    """
     @staticmethod
     def error(
       error_type: str,
@@ -323,7 +324,7 @@ class Keyboard:
       return False
 
   @staticmethod
-  def _MOUSESCROLL(axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
+  def mouseScroll(axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
     if axis == 'v' or axis == 'vertical':
       win32api.mouse_event(MOUSEEVENTF_WHEEL, x, y, dist, 0)
     elif axis == 'h' or axis == 'horizontal':
@@ -339,6 +340,7 @@ class Keyboard:
       getPosition(): Returns a tuple with the cursor's current position
       setPosition(x, y): Moves the cursor to the given x and y coordinates
     """
+
     @staticmethod
     def getPosition() -> tuple:
       # Define the POINT structure to store cursor position
@@ -383,12 +385,7 @@ class Keyboard:
 
       return self
 
-    def __exit__(
-      self: Self,
-      type: Any,
-      value: Any,
-      traceback: Any
-    ) -> None:
+    def __exit__(self: Self, type: Any, value: Any, traceback: Any) -> None:
       pass
 
     # Main function
@@ -512,13 +509,13 @@ class Keyboard:
       return Keyboard._Vars.exit_code
 
     if direction == 'up':
-      Keyboard._MOUSESCROLL('vertical', amount, dx, dy)
+      Keyboard.mouseScroll('vertical', amount, dx, dy)
     elif direction == 'down':
-      Keyboard._MOUSESCROLL('vertical', -amount, dx, dy)
+      Keyboard.mouseScroll('vertical', -amount, dx, dy)
     elif direction == 'right':
-      Keyboard._MOUSESCROLL('horizontal', amount, dx, dy)
+      Keyboard.mouseScroll('horizontal', amount, dx, dy)
     elif direction == 'left':
-      Keyboard._MOUSESCROLL('horizontal', -amount, dx, dy)
+      Keyboard.mouseScroll('horizontal', -amount, dx, dy)
 
   @staticmethod
   def pressMouse(mouse_button: str | int) -> None:
@@ -724,8 +721,9 @@ class Keyboard:
 
     str_list: list = list(source_str)
     shift_alternate: list = [
-      '|', '~', '?', ':', '{', '}', '\"', '!', '@', '#', '$', '%', '^', '&',
-      '*', '(', ')', '+', '<', '>', '_'
+      '|', '~', '?', ':', '{', '}', '\"', '!', '@', 
+      '#', '$', '%', '^', '&', '*', '(', ')', '+',
+      '<', '>', '_'
     ]
     for char in str_list:
       if char not in Keyboard.vk_codes and not char.isupper():

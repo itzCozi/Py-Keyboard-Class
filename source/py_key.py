@@ -45,7 +45,7 @@ class Keyboard:
   --------------------------------------------------
   |          function         description          |
   |------------------------------------------------|
-  | class   moveCursor: Moves cursor to a position |
+  | class  moveCursor: Moves cursor to a position  |
   | class  GetKeystroke: A key poller wrapper      |
   | func   _MOUSESCROLL: Bare-bones mouse scroller |
   | func   getKeyState: Returns given key's state  |
@@ -339,11 +339,18 @@ class Keyboard:
       getPosition(): Returns a tuple with the cursor's current position
       setPosition(x, y): Moves the cursor to the given x and y coordinates
     """
+    @staticmethod
     def getPosition() -> tuple:
-      return Keyboard._Vars.user32.GetCursorPos()
+      # Define the POINT structure to store cursor position
+      class POINT(ctypes.Structure):
+        _fields_: list = [("x", ctypes.c_long), ("y", ctypes.c_long)]
+      point: POINT = POINT()
+      ctypes.windll.user32.GetCursorPos(ctypes.byref(point))
+      return (point.x, point.y)
 
+    @staticmethod
     def setPosition(x: int, y: int) -> None:
-      Keyboard._Vars.user32.SetCursorPos(x, y)
+      ctypes.windll.user32.SetCursorPos(x, y)
 
   class GetKeystroke:
     """
@@ -417,30 +424,6 @@ class Keyboard:
   # Functions (most people will only use these)
 
   @staticmethod
-  def moveCursor(x: int, y: int) -> None:
-    """
-    Moves the cursor to a specific coordinate on the screen.
-
-    Args:
-      x (int): The x-coordinate to be sent to user32
-      y (int): The y-coordinate to be sent to user32
-    """
-    # ChatGPT says SetCursorPos takes the absoulte x,y
-    # not the relative distance between the points
-    if not isinstance(x, int):
-      Keyboard._Vars.error(error_type='p', var='x', type='integer')
-      return Keyboard._Vars.exit_code
-    if not isinstance(y, int):
-      Keyboard._Vars.error(error_type='p', var='y', type='integer')
-      return Keyboard._Vars.exit_code
-
-    current_pos = Keyboard.ManipulateMouse.getPosition()
-    dx = x - current_pos[0]
-    dy = y - current_pos[1]
-    Keyboard.ManipulateMouse.setPosition(dx, dy)
-    time.sleep(0.1)
-
-  @staticmethod
   def getKeyState(key_code: str | int) -> bool:
     """
     Returns the given key's current state
@@ -474,6 +457,25 @@ class Keyboard:
         error_type='r', runtime_error='user32 returned a non "1" or "0" value'
       )
       return Keyboard._Vars.exit_code
+
+  @staticmethod
+  def moveCursor(x: int, y: int) -> None:
+    """
+    Moves the cursor to a specific coordinate on the screen.
+
+    Args:
+      x (int): The x-coordinate to be sent to user32
+      y (int): The y-coordinate to be sent to user32
+    """
+    if not isinstance(x, int):
+      Keyboard._Vars.error(error_type='p', var='x', type='integer')
+      return Keyboard._Vars.exit_code
+    if not isinstance(y, int):
+      Keyboard._Vars.error(error_type='p', var='y', type='integer')
+      return Keyboard._Vars.exit_code
+
+    # The ManipulateMouse class has a function for this
+    Keyboard.ManipulateMouse.setPosition(x, y)
 
   @staticmethod
   def scrollMouse(direction: str, amount: int, dx: int = 0, dy: int = 0) -> None:

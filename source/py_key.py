@@ -2,9 +2,13 @@
 # PY-VERSION: 3.12+
 # GITHUB: https://github.com/itzCozi/Py-Keyboard-Class
 
-import time
-import ctypes
+import keyboard as key_lib
 import win32api
+import ctypes
+import time
+import sys
+import os
+
 from typing import *
 from win32con import *
 from ctypes import wintypes
@@ -14,29 +18,8 @@ from win32console import (
   ENABLE_LINE_INPUT, ENABLE_PROCESSED_INPUT
 )
 
-# CODE
-'''
-* Make sure optional parameters are specifed in the
-functions doc-string EX: output_path (str, optional)
-* All variable declarations must be type hinted EX: num: int = 0
-* All paths use '/' to separate dirs instead of '\' like windows
-* All classes and functions use CamelCase variables use snake_case
-* If a function has parameters each variable must have specified types
-* When assigning parameters in functions dont use spaces between equals sign
-* Functions without 'self' parameter in a class must have the @staticmethod tag
-* Whenever in a formatted string use double quotes and then single quotes to end
-* References to variables must be in double quotes EX: (var: "5" is not a number)
-* If a variable or function uses more than one type use EX: num: int | float = 0.1
-* When outputting a message like info or an error end the print statement with a period
-'''
 
-# TODO
-'''
-* Put everything in PyCharm
-* Also look at: https://blog.devgenius.io/my-top-5-favorite-pycharm-plugins-89bea03c8200
-'''
-
-
+# Some of this code is a stack overflow paste (idk win32 API)
 class Keyboard:
   """
   A class for receiving and sending keystrokes/mouse inputs
@@ -61,7 +44,7 @@ class Keyboard:
 
   class _Vars:
     """
-    Keyboard class's variable container
+    Keyboard class for static variables.
     """
     @staticmethod
     def error(
@@ -70,6 +53,9 @@ class Keyboard:
       type: str = None,
       runtime_error: str = None
     ) -> None:
+      """
+      Display error messages based on the type of error encountered.
+      """
       if error_type == 'p':
         print(f'PARAMETER: Given variable {var} is not a {type}.')
       elif error_type == 'r':
@@ -92,156 +78,156 @@ class Keyboard:
   # Each key value is 4 chars long and formatted in hexadecimal
   vk_codes: dict = {
     # --- Mouse ---
-    "left_mouse": 0x01,
-    "right_mouse": 0x02,
-    "middle_mouse": 0x04,
-    "mouse_button1": 0x05,
-    "mouse_button2": 0x06,
+    "left_mouse":           0x01,
+    "right_mouse":          0x02,
+    "middle_mouse":         0x04,
+    "mouse_button1":        0x05,
+    "mouse_button2":        0x06,
     # --- Control Keys ---
-    "win": 0x5B,  # Left Windows key
-    "select": 0x29,
-    "pg_down": 0x21,
-    "pg_up": 0x22,
-    "end": 0x23,
-    "home": 0x24,
-    "insert": 0x2D,
-    "delete": 0x2E,
-    "back": 0x08,
-    "enter": 0x0D,
-    "shift": 0x10,
-    "ctrl": 0x11,
-    "alt": 0x12,
-    "caps": 0x14,
-    "escape": 0x1,
-    "space": 0x20,
-    "tab": 0x09,
-    "sleep": 0x5F,
-    "zoom": 0xFB,
-    "num_lock": 0x90,
-    "scroll_lock": 0x91,
+    "win":                  0x5B,  # Left Windows key
+    "select":               0x29,
+    "pg_down":              0x21,
+    "pg_up":                0x22,
+    "end":                  0x23,
+    "home":                 0x24,
+    "insert":               0x2D,
+    "delete":               0x2E,
+    "back":                 0x08,
+    "enter":                0x0D,
+    "shift":                0x10,
+    "ctrl":                 0x11,
+    "alt":                  0x12,
+    "caps":                 0x14,
+    "escape":               0x1,
+    "space":                0x20,
+    "tab":                  0x09,
+    "sleep":                0x5F,
+    "zoom":                 0xFB,
+    "num_lock":             0x90,
+    "scroll_lock":          0x91,
     # --- OEM Specific ---
-    "plus": 0xBB,
-    "comma": 0xBC,
-    "minus": 0xBD,
-    "period": 0xBE,
+    "plus":                 0xBB,
+    "comma":                0xBC,
+    "minus":                0xBD,
+    "period":               0xBE,
     # --- Media ---
-    "vol_mute": 0xAD,
-    "vol_down": 0xAE,
-    "vol_up": 0xAF,
-    "next": 0xB0,
-    "prev": 0xB1,
-    "pause": 0xB2,
-    "play": 0xB3,
+    "vol_mute":             0xAD,
+    "vol_down":             0xAE,
+    "vol_up":               0xAF,
+    "next":                 0xB0,
+    "prev":                 0xB1,
+    "pause":                0xB2,
+    "play":                 0xB3,
     # --- Arrow Keys ---
-    "left": 0x25,
-    "up": 0x26,
-    "right": 0x27,
-    "down": 0x28,
+    "left":                 0x25,
+    "up":                   0x26,
+    "right":                0x27,
+    "down":                 0x28,
     # --- Function Keys ---
-    "f1": 0x70,
-    "f2": 0x71,
-    "f3": 0x72,
-    "f4": 0x73,
-    "f5": 0x74,
-    "f6": 0x75,
-    "f7": 0x76,
-    "f8": 0x77,
-    "f9": 0x78,
-    "f10": 0x79,
-    "f11": 0x7A,
-    "f12": 0x7B,
-    "f13": 0x7C,
-    "f14": 0x7D,
-    "f15": 0x7E,
+    "f1":                   0x70,
+    "f2":                   0x71,
+    "f3":                   0x72,
+    "f4":                   0x73,
+    "f5":                   0x74,
+    "f6":                   0x75,
+    "f7":                   0x76,
+    "f8":                   0x77,
+    "f9":                   0x78,
+    "f10":                  0x79,
+    "f11":                  0x7A,
+    "f12":                  0x7B,
+    "f13":                  0x7C,
+    "f14":                  0x7D,
+    "f15":                  0x7E,
     # --- Keypad ---
-    "pad_0": 0x60,
-    "pad_1": 0x61,
-    "pad_2": 0x62,
-    "pad_3": 0x63,
-    "pad_4": 0x64,
-    "pad_5": 0x65,
-    "pad_6": 0x66,
-    "pad_7": 0x67,
-    "pad_8": 0x68,
-    "pad_9": 0x69,
+    "pad_0":                0x60,
+    "pad_1":                0x61,
+    "pad_2":                0x62,
+    "pad_3":                0x63,
+    "pad_4":                0x64,
+    "pad_5":                0x65,
+    "pad_6":                0x66,
+    "pad_7":                0x67,
+    "pad_8":                0x68,
+    "pad_9":                0x69,
     # --- Symbols ---
-    "multiply": 0x6A,
-    "add": 0x6B,
-    "separator": 0x6C,
-    "subtract": 0x6D,
-    "decimal": 0x6E,
-    "divide": 0x6F,
+    "multiply":             0x6A,
+    "add":                  0x6B,
+    "separator":            0x6C,
+    "subtract":             0x6D,
+    "decimal":              0x6E,
+    "divide":               0x6F,
     # --- Alphanumerical ---
-    "0": 0x30,
-    "1": 0x31,
-    "2": 0x32,
-    "3": 0x33,
-    "4": 0x34,
-    "5": 0x35,
-    "6": 0x36,
-    "7": 0x37,
-    "8": 0x38,
-    "9": 0x39,
-    "a": 0x41,
-    "b": 0x42,
-    "c": 0x43,
-    "d": 0x44,
-    "e": 0x45,
-    "f": 0x46,
-    "g": 0x47,
-    "h": 0x48,
-    "i": 0x49,
-    "j": 0x4A,
-    "k": 0x4B,
-    "l": 0x4C,
-    "m": 0x4D,
-    "n": 0x4E,
-    "o": 0x4F,
-    "p": 0x50,
-    "q": 0x51,
-    "r": 0x52,
-    "s": 0x53,
-    "t": 0x54,
-    "u": 0x55,
-    "v": 0x56,
-    "w": 0x57,
-    "x": 0x58,
-    "y": 0x59,
-    "z": 0x5A,
-    "=": 0x6B,
-    " ": 0x20,
-    ".": 0xBE,
-    ",": 0xBC,
-    "-": 0x6D,
-    "`": 0xC0,
-    "/": 0xBF,
-    ";": 0xBA,
-    "[": 0xDB,
-    "]": 0xDD,
-    "_": 0x6D,   # Shift
-    "|": 0xDC,   # Shift
-    "~": 0xC0,   # Shift
-    "?": 0xBF,   # Shift
-    ":": 0xBA,   # Shift
-    "<": 0xBC,   # Shift
-    ">": 0xBE,   # Shift
-    "{": 0xDB,   # Shift
-    "}": 0xDD,   # Shift
-    "!": 0x31,   # Shift
-    "@": 0x32,   # Shift
-    "#": 0x33,   # Shift
-    "$": 0x34,   # Shift
-    "%": 0x35,   # Shift
-    "^": 0x36,   # Shift
-    "&": 0x37,   # Shift
-    "*": 0x38,   # Shift
-    "(": 0x39,   # Shift
-    ")": 0x30,   # Shift
-    "+": 0x6B,   # Shift
-    "\"": 0xDE,  # Shift
-    "\'": 0xDE,
-    "\\": 0xDC,
-    "\n": 0x0D
+    "0":                    0x30,
+    "1":                    0x31,
+    "2":                    0x32,
+    "3":                    0x33,
+    "4":                    0x34,
+    "5":                    0x35,
+    "6":                    0x36,
+    "7":                    0x37,
+    "8":                    0x38,
+    "9":                    0x39,
+    "a":                    0x41,
+    "b":                    0x42,
+    "c":                    0x43,
+    "d":                    0x44,
+    "e":                    0x45,
+    "f":                    0x46,
+    "g":                    0x47,
+    "h":                    0x48,
+    "i":                    0x49,
+    "j":                    0x4A,
+    "k":                    0x4B,
+    "l":                    0x4C,
+    "m":                    0x4D,
+    "n":                    0x4E,
+    "o":                    0x4F,
+    "p":                    0x50,
+    "q":                    0x51,
+    "r":                    0x52,
+    "s":                    0x53,
+    "t":                    0x54,
+    "u":                    0x55,
+    "v":                    0x56,
+    "w":                    0x57,
+    "x":                    0x58,
+    "y":                    0x59,
+    "z":                    0x5A,
+    "=":                    0x6B,
+    " ":                    0x20,
+    ".":                    0xBE,
+    ",":                    0xBC,
+    "-":                    0x6D,
+    "`":                    0xC0,
+    "/":                    0xBF,
+    ";":                    0xBA,
+    "[":                    0xDB,
+    "]":                    0xDD,
+    "_":                    0x6D,   # Shift
+    "|":                    0xDC,   # Shift
+    "~":                    0xC0,   # Shift
+    "?":                    0xBF,   # Shift
+    ":":                    0xBA,   # Shift
+    "<":                    0xBC,   # Shift
+    ">":                    0xBE,   # Shift
+    "{":                    0xDB,   # Shift
+    "}":                    0xDD,   # Shift
+    "!":                    0x31,   # Shift
+    "@":                    0x32,   # Shift
+    "#":                    0x33,   # Shift
+    "$":                    0x34,   # Shift
+    "%":                    0x35,   # Shift
+    "^":                    0x36,   # Shift
+    "&":                    0x37,   # Shift
+    "*":                    0x38,   # Shift
+    "(":                    0x39,   # Shift
+    ")":                    0x30,   # Shift
+    "+":                    0x6B,   # Shift
+    "\"":                   0xDE,  # Shift
+    "\'":                   0xDE,
+    "\\":                   0xDC,
+    "\n":                   0x0D
   }
 
   # C struct declarations, recently added type hinting
@@ -343,6 +329,9 @@ class Keyboard:
 
     @staticmethod
     def getPosition() -> tuple:
+      """
+      Retrieve the current position of the mouse cursor.
+      """
       # Define the POINT structure to store cursor position
       class POINT(ctypes.Structure):
         _fields_: list = [("x", ctypes.c_long), ("y", ctypes.c_long)]
@@ -352,6 +341,9 @@ class Keyboard:
 
     @staticmethod
     def setPosition(x: int, y: int) -> None:
+      """
+      Set the position of the mouse cursor to the given coordinates.
+      """
       ctypes.windll.user32.SetCursorPos(x, y)
 
   class GetKeystroke:
@@ -371,9 +363,15 @@ class Keyboard:
     """
 
     def __init__(self: Self) -> None:
+      """
+      Initialize the class and config.
+      """
       self.cur_event_len: None | int = None
 
     def __enter__(self: Self) -> Any:
+      """
+      Enter context manager to initialize resources.
+      """
       self.readHandle: Any = GetStdHandle(STD_INPUT_HANDLE)
       self.readHandle.SetConsoleMode(
         ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT
@@ -386,10 +384,19 @@ class Keyboard:
       return self
 
     def __exit__(self: Self, type: Any, value: Any, traceback: Any) -> None:
+      """
+      Exit context manager to release resources.
+      """
       pass
 
     # Main function
     def poll(self: Self) -> str | None:
+      """
+      Poll and return the last pressed key from the input stream.
+      
+      Returns:
+        str | None: The last pressed key, or None if no key is pressed.
+      """
       if not len(self.captured_chars) == 0:
         return self.captured_chars.pop(0)
       events_peek: tuple = self.readHandle.PeekConsoleInput(10000)

@@ -2,12 +2,9 @@
 # PY-VERSION: 3.12+
 # GITHUB: https://github.com/itzCozi/Py-Keyboard-Class
 
-import keyboard as key_lib
 import win32api
 import ctypes
 import time
-import sys
-import os
 
 from typing import *
 from win32con import *
@@ -46,6 +43,7 @@ class Keyboard:
     """
     Keyboard class for static variables.
     """
+
     @staticmethod
     def error(
       error_type: str,
@@ -98,7 +96,7 @@ class Keyboard:
     "ctrl":                 0x11,
     "alt":                  0x12,
     "caps":                 0x14,
-    "escape":               0x1,
+    "escape":               0x1B,
     "space":                0x20,
     "tab":                  0x09,
     "sleep":                0x5F,
@@ -224,7 +222,7 @@ class Keyboard:
     "(":                    0x39,   # Shift
     ")":                    0x30,   # Shift
     "+":                    0x6B,   # Shift
-    "\"":                   0xDE,  # Shift
+    "\"":                   0xDE,   # Shift
     "\'":                   0xDE,
     "\\":                   0xDC,
     "\n":                   0x0D
@@ -282,13 +280,13 @@ class Keyboard:
 
     class _INPUT(ctypes.Union):
       _fields_: tuple[
-        tuple[Literal['ki'], type[KEYBDINPUT]], 
+        tuple[Literal['ki'], type[KEYBDINPUT]],
         tuple[Literal['mi'], type[MOUSEINPUT]]
       ] = (('ki', KEYBDINPUT), ('mi', MOUSEINPUT))
 
-    _anonymous_: tuple[Literal['_input']] = ('_input', )
+    _anonymous_: tuple[Literal['_input']] = ('_input',)
     _fields_: tuple[
-      tuple[Literal['type'], wintypes.DWORD], 
+      tuple[Literal['type'], wintypes.DWORD],
       tuple[Literal['_input'], type[_INPUT]]
     ] = (('type', wintypes.DWORD), ('_input', _INPUT))
 
@@ -335,6 +333,7 @@ class Keyboard:
       # Define the POINT structure to store cursor position
       class POINT(ctypes.Structure):
         _fields_: list = [("x", ctypes.c_long), ("y", ctypes.c_long)]
+
       point: POINT = POINT()
       ctypes.windll.user32.GetCursorPos(ctypes.byref(point))
       return (point.x, point.y)
@@ -393,7 +392,7 @@ class Keyboard:
     def poll(self: Self) -> str | None:
       """
       Poll and return the last pressed key from the input stream.
-      
+
       Returns:
         str | None: The last pressed key, or None if no key is pressed.
       """
@@ -728,7 +727,7 @@ class Keyboard:
 
     str_list: list = list(source_str)
     shift_alternate: list = [
-      '|', '~', '?', ':', '{', '}', '\"', '!', '@', 
+      '|', '~', '?', ':', '{', '}', '\"', '!', '@',
       '#', '$', '%', '^', '&', '*', '(', ')', '+',
       '<', '>', '_'
     ]

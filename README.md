@@ -26,6 +26,7 @@ Main Keyboard input class (before static type hinting was added)
 
 ## Extra 
 [Source](https://github.com/itzCozi/Py-Keyboard-Class/blob/main/source/py_key.py)  
+[Releases](https://github.com/itzCozi/Py-Keyboard-Class/releases)  
 [Compiler](https://pypi.org/project/auto-py-to-exe/)  
 
 

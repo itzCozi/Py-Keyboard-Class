@@ -462,6 +462,18 @@ class Keyboard:
       return Keyboard._Vars.exit_code
 
   @staticmethod
+  def locateCursor() -> Tuple[int, int]:
+    """
+    Return a tuple of the current X & Y coordinates of the mouse
+
+    Returns:
+      tuple[int, int]: The current X and Y coordinates EX: (350, 940)
+    """
+
+    # The ManipulateMouse class has a function for this
+    return Keyboard.ManipulateMouse.getPosition()
+
+  @staticmethod
   def moveCursor(x: int, y: int) -> None:
     """
     Moves the cursor to a specific coordinate on the screen.
@@ -477,7 +489,7 @@ class Keyboard:
       Keyboard._Vars.error(error_type='p', var='y', type='integer')
       return Keyboard._Vars.exit_code
 
-    # The ManipulateMouse class has a function for this
+    # The ManipulateMouse class also has a function for this
     Keyboard.ManipulateMouse.setPosition(x, y)
 
   @staticmethod

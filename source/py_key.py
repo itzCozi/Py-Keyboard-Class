@@ -347,7 +347,7 @@ class Keyboard:
 
   class GetKeystroke:
     """
-    A wrapper that returns the key pressed
+    A wrapper that returns the key pressed (bare-bones / ass)
 
     Example:
       with KeyPoller() as keyPoller:

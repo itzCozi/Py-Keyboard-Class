@@ -2,17 +2,20 @@
 # PY-VERSION: 3.12+
 # GITHUB: https://github.com/itzCozi/Py-Keyboard-Class
 
-import win32api
 import ctypes
 import time
-
-from typing import *
-from win32con import *
 from ctypes import wintypes
+from typing import Any, Literal, Self, Tuple
+
+import win32api
 from win32api import STD_INPUT_HANDLE
+from win32con import *
 from win32console import (
-  GetStdHandle, KEY_EVENT, ENABLE_ECHO_INPUT,
-  ENABLE_LINE_INPUT, ENABLE_PROCESSED_INPUT
+  ENABLE_ECHO_INPUT,
+  ENABLE_LINE_INPUT,
+  ENABLE_PROCESSED_INPUT,
+  KEY_EVENT,
+  GetStdHandle,
 )
 
 
@@ -229,7 +232,7 @@ class Keyboard:
   }
 
   # C struct declarations, recently added type hinting
-  wintypes.ULONG_PTR: type[wintypes.WPARAM] = wintypes.WPARAM
+  wintypes.WPARAM = wintypes.WPARAM  # Type annotation not supported
   global MOUSEINPUT, KEYBDINPUT
 
   class MOUSEINPUT(ctypes.Structure):
@@ -310,9 +313,9 @@ class Keyboard:
   @staticmethod
   def mouseScroll(axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
     if axis == 'v' or axis == 'vertical':
-      win32api.mouse_event(MOUSEEVENTF_WHEEL, x, y, dist, 0)
+      win32api.mouse_event(MOUSEEVENTF_WHEEL, x, y, dist, 0)  # noqa: F405 MOUSEEVENTF_WHEEL is a windows thing
     elif axis == 'h' or axis == 'horizontal':
-      win32api.mouse_event(MOUSEEVENTF_HWHEEL, x, y, dist, 0)
+      win32api.mouse_event(MOUSEEVENTF_HWHEEL, x, y, dist, 0)  # noqa: F405 MOUSEEVENTF_HWHEEL is a windows thing as well
     else:
       return False
 
@@ -417,8 +420,9 @@ class Keyboard:
       if not len(self.captured_chars) == 0:
         return self.captured_chars.pop()  # Return the last item in the list
 
-  _Vars.user32.SendInput.errcheck: Any = _checkCount
-  _Vars.user32.SendInput.argtypes: Any = (
+  # Type annotation not supported
+  _Vars.user32.SendInput.errcheck = _checkCount
+  _Vars.user32.SendInput.argtypes = (
     wintypes.UINT,  # nInputs
     LPINPUT,  # pInputs
     ctypes.c_int  # cbSize

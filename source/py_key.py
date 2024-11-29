@@ -8,15 +8,7 @@ from ctypes import wintypes
 from typing import Any, Literal, Self, Tuple
 
 import win32api
-from win32api import STD_INPUT_HANDLE
 from win32con import *
-from win32console import (
-    ENABLE_ECHO_INPUT,
-    ENABLE_LINE_INPUT,
-    ENABLE_PROCESSED_INPUT,
-    KEY_EVENT,
-    GetStdHandle,
-)
 
 
 # Some of this code is a stack overflow paste (idk win32 API)
@@ -28,7 +20,6 @@ class Keyboard:
   |          function         description          |
   |------------------------------------------------|
   | class  ManipulateMouse: Mouse controller class |
-  | class  GetKeystroke: A key poller wrapper      |
   | func   mouseScroll: Bare-bones mouse scroller  |
   | func   getKeyState: Returns given key's state  |
   | func   moveCursor: Moves cursor to a position  |
@@ -49,7 +40,7 @@ class Keyboard:
     """
 
     @staticmethod
-    def error(
+    def error (
         error_type: str,
         var: str = None,
         type: str = None,
@@ -268,12 +259,12 @@ class Keyboard:
         ('dwExtraInfo', wintypes.ULONG_PTR)                   # E
     )
 
-    def __init__(
+    def __init__ (
         self: Self,
         *args: tuple[Any, ...],
         **kwds: dict[str, Any]
     ) -> None:
-      # *args & **kwds are confusing asf: https://youtu.be/4jBJhCaNrWU?si=0zZQqGuMaR5ulLNb
+      # *args & **kwds are confusing asf: https://youtu.be/4jBJhCaNrWU
       super(KEYBDINPUT, self).__init__(*args, **kwds)
       if not self.dwFlags & Keyboard._Vars.KEYEVENTF_UNICODE:
         self.wScan: Any = Keyboard._Vars.user32.MapVirtualKeyExW(
@@ -299,20 +290,20 @@ class Keyboard:
   # Helpers / Bare-bones implementation
 
   @staticmethod
-  def _checkCount(result: Any, func: Any, args: Any) -> Any:
+  def _checkCount (result: Any, func: Any, args: Any) -> Any:
     if result == 0:
       raise ctypes.WinError(ctypes.get_last_error())
     return args
 
   @staticmethod
-  def _lookup(key: Any) -> int | bool:
+  def _lookup (key: Any) -> int | bool:
     if key in Keyboard._Vars.vk_codes:
       return Keyboard._Vars.vk_codes.get(key)
     else:
       return False
 
   @staticmethod
-  def mouseScroll(axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
+  def mouseScroll (axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
     if axis == 'v' or axis == 'vertical':
       win32api.mouse_event(MOUSEEVENTF_WHEEL, x, y, dist, 0)  # noqa: F405 MOUSEEVENTF_WHEEL is a windows thing
     elif axis == 'h' or axis == 'horizontal':
@@ -330,7 +321,7 @@ class Keyboard:
     """
 
     @staticmethod
-    def getPosition() -> tuple:
+    def getPosition () -> tuple:
       """
       Retrieve the current position of the mouse cursor.
       """
@@ -343,83 +334,11 @@ class Keyboard:
       return (point.x, point.y)
 
     @staticmethod
-    def setPosition(x: int, y: int) -> None:
+    def setPosition (x: int, y: int) -> None:
       """
       Set the position of the mouse cursor to the given coordinates.
       """
       ctypes.windll.user32.SetCursorPos(x, y)
-
-  class GetKeystroke:
-    """
-    A wrapper that returns the key pressed (bare-bones / ass)
-
-    Example:
-      with KeyPoller() as keyPoller:
-        while True:
-          key: str = keyPoller.poll()
-          if key is not None:
-            if key == "c": break
-            print(key)
-
-    Returns:
-      str: The key pressed after calling the class
-    """
-
-    def __init__(self: Self) -> None:
-      """
-      Initialize the class and config.
-      """
-      self.cur_event_len: None | int = None
-
-    def __enter__(self: Self) -> Any:
-      """
-      Enter context manager to initialize resources.
-      """
-      self.readHandle: Any = GetStdHandle(STD_INPUT_HANDLE)
-      self.readHandle.SetConsoleMode(
-          ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT
-      )  # Set terminal flags/mode
-
-      self.cur_event_len: int = 0
-      self.cur_keys_len: int = 0
-      self.captured_chars: list = []
-
-      return self
-
-    def __exit__(self: Self, type: Any, value: Any, traceback: Any) -> None:
-      """
-      Exit context manager to release resources.
-      """
-      pass
-
-    # Main function
-    def poll(self: Self) -> str | None:
-      """
-      Poll and return the last pressed key from the input stream.
-
-      Returns:
-        str | None: The last pressed key, or None if no key is pressed.
-      """
-      if not len(self.captured_chars) == 0:
-        return self.captured_chars.pop(0)
-      events_peek: tuple = self.readHandle.PeekConsoleInput(10000)
-
-      if len(events_peek) == 0:
-        return None
-
-      if not len(events_peek) == self.cur_event_len:
-
-        for cur_event in events_peek[self.cur_event_len:]:
-          if cur_event.EventType == KEY_EVENT:
-            if ord(cur_event.Char) == 0 or not cur_event.KeyDown:
-              pass
-            else:
-              cur_char: str = str(cur_event.Char)
-              self.captured_chars.append(cur_char)
-
-        self.cur_event_len: int = len(events_peek)
-      if not len(self.captured_chars) == 0:
-        return self.captured_chars.pop()  # Return the last item in the list
 
   # Type annotation not supported
   _Vars.user32.SendInput.errcheck = _checkCount
@@ -432,7 +351,7 @@ class Keyboard:
   # Functions (most people will only use these)
 
   @staticmethod
-  def getKeyState(key_code: str | int) -> bool:
+  def getKeyState (key_code: str | int) -> bool:
     """
     Returns the given key's current state
 
@@ -469,9 +388,9 @@ class Keyboard:
       return Keyboard._Vars.exit_code
 
   @staticmethod
-  def locateCursor() -> Tuple[int, int]:
+  def locateCursor () -> Tuple[int, int]:
     """
-    Return a tuple of the current X & Y coordinates of the mouse
+    Returns a tuple of the current X & Y coordinates of the mouse
 
     Returns:
       tuple[int, int]: The current X and Y coordinates EX: (350, 940)
@@ -481,7 +400,7 @@ class Keyboard:
     return Keyboard.ManipulateMouse.getPosition()
 
   @staticmethod
-  def moveCursor(x: int, y: int) -> None:
+  def moveCursor (x: int, y: int) -> None:
     """
     Moves the cursor to a specific coordinate on the screen.
 
@@ -500,7 +419,7 @@ class Keyboard:
     Keyboard.ManipulateMouse.setPosition(x, y)
 
   @staticmethod
-  def scrollMouse(direction: str, amount: int, dx: int = 0, dy: int = 0) -> None:
+  def scrollMouse (direction: str, amount: int, dx: int = 0, dy: int = 0) -> None:
     """
     Scrolls mouse up, down, right and left by a certain amount
 
@@ -510,7 +429,7 @@ class Keyboard:
       )
       amount (int): How much to scroll has to be at least 1
       dx (int, optional): The mouse's position on the x-axis
-      dy (int, optional): The mouse's position on the x-axis
+      dy (int, optional): The mouse's position on the y-axis
     """
     if not isinstance(direction, str):
       Keyboard._Vars.error(error_type='p', var='direction', type='string')
@@ -545,9 +464,9 @@ class Keyboard:
       Keyboard.mouseScroll('horizontal', -amount, dx, dy)
 
   @staticmethod
-  def pressMouse(mouse_button: str | int) -> None:
+  def pressMouse (mouse_button: str | int) -> None:
     """
-    Releases a mouse button
+    Presses a mouse button
 
     Args:
       mouse_button (str | int): The button to press accepted: (
@@ -589,9 +508,9 @@ class Keyboard:
     Keyboard._Vars.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
   @staticmethod
-  def releaseMouse(mouse_button: str | int) -> None:
+  def releaseMouse (mouse_button: str | int) -> None:
     """
-    Presses a mouse button
+    Releases a mouse button
 
     Args:
       mouse_button (str | int): The button to press accepted: (
@@ -631,7 +550,7 @@ class Keyboard:
     Keyboard._Vars.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
   @staticmethod
-  def pressKey(key_code: str | int) -> None:
+  def pressKey (key_code: str | int) -> None:
     """
     Presses a keyboard key
 
@@ -657,7 +576,7 @@ class Keyboard:
     Keyboard._Vars.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
   @staticmethod
-  def releaseKey(key_code: str | int) -> None:
+  def releaseKey (key_code: str | int) -> None:
     """
     Releases a keyboard key
 
@@ -686,7 +605,7 @@ class Keyboard:
     Keyboard._Vars.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
   @staticmethod
-  def pressAndReleaseKey(key_code: str | int) -> None:
+  def pressAndReleaseKey (key_code: str | int) -> None:
     """
     Presses and releases a keyboard key sequentially
 
@@ -709,7 +628,7 @@ class Keyboard:
     Keyboard.releaseKey(key_code)
 
   @staticmethod
-  def pressAndReleaseMouse(mouse_button: str | int) -> None:
+  def pressAndReleaseMouse (mouse_button: str | int) -> None:
     """
     Presses and releases a mouse button sequentially
 
@@ -748,7 +667,7 @@ class Keyboard:
     Keyboard.releaseMouse(original_name)
 
   @staticmethod
-  def keyboardWrite(source_str: str) -> None:
+  def keyboardWrite (source_str: str) -> None:
     """
     Writes by sending virtual inputs
 
@@ -798,7 +717,7 @@ class Keyboard:
     Keyboard.releaseKey('shift')  # Incase it is not already released
 
   @staticmethod
-  def altTab() -> None:
+  def altTab () -> None:
     """
     My development test function, just opens alt-tab menu
     """

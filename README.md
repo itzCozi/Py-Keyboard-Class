@@ -124,8 +124,13 @@ Args:
 ```
 
 ## Code Pics
-![main class doc-string](.github/keyboard-doc-string.png 'Keyboard class doc-string')  
-Keyboard class doc-string
-
-![Keyboard input class](.github/input-class.png 'class for Keyboard input')  
-Main Keyboard input class (before static type hinting was added)
+<div style="text-align: center;">
+  <div style="display: inline-block;">
+    <img src=".github/input-class.png" alt="class for Keyboard input" title="class for Keyboard input" />
+    <p>Main Keyboard input class (before static type hinting was added)</p>
+  </div>
+  <div style="display: inline-block; margin-right: 10px;">
+    <img src=".github/keyboard-doc-string.png" alt="Keyboard class doc-string" title="Keyboard class doc-string" />
+    <p>Keyboard class doc-string</p>
+  </div>
+</div>

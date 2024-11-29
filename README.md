@@ -1,4 +1,5 @@
 # Py-Keyboard-Class
+
 A class used for handling inputs via virtual keyboard codes and win32 API. The Keyboard class can send inputs via functions like `scrollMouse`, `pressAndReleaseKey`, `keyboardWrite` and `pressAndReleaseMouse` it can also return keystrokes using the `GetKeystroke` wrapper which polls key presses. This project can send keyboard and mouse inputs on windows for anything.
 
 ![Keyboard class doc-string](.github/example.gif)
@@ -8,6 +9,7 @@ A class used for handling inputs via virtual keyboard codes and win32 API. The K
 ## Usage
 
 ### getKeyState()
+
 ```
 Returns the given key's current state
 
@@ -19,6 +21,7 @@ Returns:
 ```
 
 ### locateCursor()
+
 ```
 Returns a tuple of the current X & Y coordinates of the mouse
 
@@ -27,6 +30,7 @@ Returns:
 ```
 
 ### moveCursor()
+
 ```
 Moves the cursor to a specific coordinate on the screen.
 
@@ -36,6 +40,7 @@ Args:
 ```
 
 ### scrollMouse()
+
 ```
 Scrolls mouse up, down, right and left by a certain amount
 
@@ -49,6 +54,7 @@ Args:
 ```
 
 ### pressMouse()
+
 ```
 Presses a mouse button
 
@@ -63,6 +69,7 @@ Args:
 ```
 
 ### releaseMouse()
+
 ```
 Releases a mouse button
 
@@ -77,6 +84,7 @@ Args:
 ```
 
 ### pressKey()
+
 ```
 Presses a keyboard key
 
@@ -85,6 +93,7 @@ Args:
 ```
 
 ### releaseKey()
+
 ```
 Releases a keyboard key
 
@@ -93,6 +102,7 @@ Args:
 ```
 
 ### pressAndReleaseKey()
+
 ```
 Presses and releases a keyboard key sequentially
 
@@ -101,6 +111,7 @@ Args:
 ```
 
 ### pressAndReleaseMouse()
+
 ```
 Presses and releases a mouse button sequentially
 
@@ -115,6 +126,7 @@ Args:
 ```
 
 ### keyboardWrite()
+
 ```
 Writes by sending virtual inputs
 
@@ -124,6 +136,7 @@ Args:
 ```
 
 ## Code Pics
+
 <div style="text-align: center;">
   <div style="display: inline-block;">
     <img src=".github/input-class.png" alt="class for Keyboard input" title="class for Keyboard input" />

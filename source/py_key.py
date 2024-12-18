@@ -10,6 +10,7 @@ from typing import Any, Literal, Self, Tuple
 import win32api
 from win32con import *
 
+# TODO: Add support for receiving keyboard and mouse inputs
 
 # Some of this code is a stack overflow paste (idk win32 API)
 class Keyboard:

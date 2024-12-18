@@ -40,7 +40,7 @@ class Keyboard:
     """
 
     @staticmethod
-    def error (
+    def error(
         error_type: str,
         var: str = None,
         type: str = None,
@@ -49,15 +49,15 @@ class Keyboard:
       """
       Display error messages based on the type of error encountered.
       """
-      if error_type == 'p':
-        print(f'PARAMETER: Given variable {var} is not a {type}.')
-      elif error_type == 'r':
-        print(f'RUNTIME: {runtime_error.capitalize()}.')
-      elif error_type == 'u':
-        print('UNKNOWN: An unknown error was encountered.')
+      if error_type == "p":
+        print(f"PARAMETER: Given variable {var} is not a {type}.")
+      elif error_type == "r":
+        print(f"RUNTIME: {runtime_error.capitalize()}.")
+      elif error_type == "u":
+        print("UNKNOWN: An unknown error was encountered.")
       return None
 
-    exit_code: None = None
+    exit_code: None = None  # Exit code for error handling
     INPUT_MOUSE: int = 0
     INPUT_KEYBOARD: int = 1
     MAPVK_VK_TO_VSC: int = 0
@@ -65,7 +65,7 @@ class Keyboard:
     KEYEVENTF_UNICODE: int = 0x0004
     KEYEVENTF_SCANCODE: int = 0x0008
     KEYEVENTF_EXTENDEDKEY: int = 0x0001
-    user32: ctypes.WinDLL = ctypes.WinDLL('user32', use_last_error=True)
+    user32: ctypes.WinDLL = ctypes.WinDLL("user32", use_last_error=True)
 
     # Reference: https://msdn.microsoft.com/en-us/library/dd375731
     # Each key value is 4 chars long and formatted in hexadecimal
@@ -109,8 +109,8 @@ class Keyboard:
         "vol_up":               0xAF,
         "next":                 0xB0,
         "prev":                 0xB1,
-        "pause":                0xB2,
-        "play":                 0xB3,
+        "stop":                 0xB2,
+        "pause_play":           0xB3,
         # ------- Arrow Keys -------
         "left":                 0x25,
         "up":                   0x26,
@@ -132,6 +132,15 @@ class Keyboard:
         "f13":                  0x7C,
         "f14":                  0x7D,
         "f15":                  0x7E,
+        "f16":                  0x7F,
+        "f17":                  0x80,
+        "f18":                  0x81,
+        "f19":                  0x82,
+        "f20":                  0x83,
+        "f21":                  0x84,
+        "f22":                  0x85,
+        "f23":                  0x86,
+        "f24":                  0x87,
         # --------- Keypad ---------
         "pad_0":                0x60,
         "pad_1":                0x61,
@@ -229,37 +238,37 @@ class Keyboard:
 
   class MOUSEINPUT(ctypes.Structure):
     _fields_: tuple[
-        tuple[Literal['dx'], wintypes.LONG],                  # A
-        tuple[Literal['dy'], wintypes.LONG],                  # B
-        tuple[Literal['mouseData'], wintypes.DWORD],          # C
-        tuple[Literal['dwFlags'], wintypes.DWORD],            # D
-        tuple[Literal['time'], wintypes.DWORD],               # E
-        tuple[Literal['dwExtraInfo'], type[wintypes.WPARAM]]  # F
+        tuple[Literal["dx"], wintypes.LONG],                  # A
+        tuple[Literal["dy"], wintypes.LONG],                  # B
+        tuple[Literal["mouseData"], wintypes.DWORD],          # C
+        tuple[Literal["dwFlags"], wintypes.DWORD],            # D
+        tuple[Literal["time"], wintypes.DWORD],               # E
+        tuple[Literal["dwExtraInfo"], type[wintypes.WPARAM]]  # F
     ] = (
-        ('dx', wintypes.LONG),                                # A
-        ('dy', wintypes.LONG),                                # B
-        ('mouseData', wintypes.DWORD),                        # C
-        ('dwFlags', wintypes.DWORD),                          # D
-        ('time', wintypes.DWORD),                             # E
-        ('dwExtraInfo', wintypes.ULONG_PTR)                   # F
+        ("dx", wintypes.LONG),                                # A
+        ("dy", wintypes.LONG),                                # B
+        ("mouseData", wintypes.DWORD),                        # C
+        ("dwFlags", wintypes.DWORD),                          # D
+        ("time", wintypes.DWORD),                             # E
+        ("dwExtraInfo", wintypes.ULONG_PTR)                   # F
     )
 
   class KEYBDINPUT(ctypes.Structure):
     _fields_: tuple[
-        tuple[Literal['wVk'], wintypes.WORD],                 # A
-        tuple[Literal['wScan'], wintypes.WORD],               # B
-        tuple[Literal['dwFlags'], wintypes.DWORD],            # C
-        tuple[Literal['time'], wintypes.DWORD],               # D
-        tuple[Literal['dwExtraInfo'], type[wintypes.WPARAM]]  # E
+        tuple[Literal["wVk"], wintypes.WORD],                 # A
+        tuple[Literal["wScan"], wintypes.WORD],               # B
+        tuple[Literal["dwFlags"], wintypes.DWORD],            # C
+        tuple[Literal["time"], wintypes.DWORD],               # D
+        tuple[Literal["dwExtraInfo"], type[wintypes.WPARAM]]  # E
     ] = (
-        ('wVk', wintypes.WORD),                               # A
-        ('wScan', wintypes.WORD),                             # B
-        ('dwFlags', wintypes.DWORD),                          # C
-        ('time', wintypes.DWORD),                             # D
-        ('dwExtraInfo', wintypes.ULONG_PTR)                   # E
+        ("wVk", wintypes.WORD),                               # A
+        ("wScan", wintypes.WORD),                             # B
+        ("dwFlags", wintypes.DWORD),                          # C
+        ("time", wintypes.DWORD),                             # D
+        ("dwExtraInfo", wintypes.ULONG_PTR)                   # E
     )
 
-    def __init__ (
+    def __init__(
         self: Self,
         *args: tuple[Any, ...],
         **kwds: dict[str, Any]
@@ -275,38 +284,38 @@ class Keyboard:
 
     class _INPUT(ctypes.Union):
       _fields_: tuple[
-          tuple[Literal['ki'], type[KEYBDINPUT]],
-          tuple[Literal['mi'], type[MOUSEINPUT]]
-      ] = (('ki', KEYBDINPUT), ('mi', MOUSEINPUT))
+          tuple[Literal["ki"], type[KEYBDINPUT]],
+          tuple[Literal["mi"], type[MOUSEINPUT]]
+      ] = (("ki", KEYBDINPUT), ("mi", MOUSEINPUT))
 
-    _anonymous_: tuple[Literal['_input']] = ('_input',)
+    _anonymous_: tuple[Literal["_input"]] = ("_input",)
     _fields_: tuple[
-        tuple[Literal['type'], wintypes.DWORD],
-        tuple[Literal['_input'], type[_INPUT]]
-    ] = (('type', wintypes.DWORD), ('_input', _INPUT))
+        tuple[Literal["type"], wintypes.DWORD],
+        tuple[Literal["_input"], type[_INPUT]]
+    ] = (("type", wintypes.DWORD), ("_input", _INPUT))
 
   LPINPUT: Any = ctypes.POINTER(INPUT)
 
   # Helpers / Bare-bones implementation
 
   @staticmethod
-  def _checkCount (result: Any, func: Any, args: Any) -> Any:
+  def _checkCount(result: Any, func: Any, args: Any) -> Any:
     if result == 0:
       raise ctypes.WinError(ctypes.get_last_error())
     return args
 
   @staticmethod
-  def _lookup (key: Any) -> int | bool:
+  def _lookup(key: Any) -> int | bool:
     if key in Keyboard._Vars.vk_codes:
       return Keyboard._Vars.vk_codes.get(key)
     else:
       return False
 
   @staticmethod
-  def mouseScroll (axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
-    if axis == 'v' or axis == 'vertical':
+  def mouseScroll(axis: str, dist: int, x: int = 0, y: int = 0) -> None | bool:
+    if axis == "v" or axis == "vertical":
       win32api.mouse_event(MOUSEEVENTF_WHEEL, x, y, dist, 0)  # noqa: F405 MOUSEEVENTF_WHEEL is a windows thing
-    elif axis == 'h' or axis == 'horizontal':
+    elif axis == "h" or axis == "horizontal":
       win32api.mouse_event(MOUSEEVENTF_HWHEEL, x, y, dist, 0)  # noqa: F405 MOUSEEVENTF_HWHEEL is a windows thing as well
     else:
       return False
@@ -321,7 +330,7 @@ class Keyboard:
     """
 
     @staticmethod
-    def getPosition () -> tuple:
+    def getPosition() -> tuple:
       """
       Retrieve the current position of the mouse cursor.
       """
@@ -334,7 +343,7 @@ class Keyboard:
       return (point.x, point.y)
 
     @staticmethod
-    def setPosition (x: int, y: int) -> None:
+    def setPosition(x: int, y: int) -> None:
       """
       Set the position of the mouse cursor to the given coordinates.
       """
@@ -351,7 +360,7 @@ class Keyboard:
   # Functions (most people will only use these)
 
   @staticmethod
-  def getKeyState (key_code: str | int) -> bool:
+  def getKeyState(key_code: str | int) -> bool:
     """
     Returns the given key's current state
 
@@ -359,36 +368,33 @@ class Keyboard:
       key_code (str | int): The key to be checked for state
 
     Returns:
-      bool: 'False' if the key is not pressed and 'True' if it is
+      bool: "False" if the key is not pressed and "True" if it is
     """
     if not isinstance(key_code, str | int):
-      Keyboard._Vars.error(error_type='p', var='key_code',
-                           type='integer or string')
+      Keyboard._Vars.error(error_type="p", var="key_code",
+                           type="integer or string")
       return Keyboard._Vars.exit_code
 
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard._Vars.vk_codes and key_code not in Keyboard._Vars.vk_codes.values():
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not valid')
+          error_type="r", runtime_error="given key code is not valid")
       return Keyboard._Vars.exit_code
 
     integer_state: int = Keyboard._Vars.user32.GetKeyState(key_code)
-    if integer_state == 1:
-      key_state: bool = True
-    else:
-      key_state: bool = False
+    key_state: bool = True if integer_state == 1 else False
 
-    if 'key_state' in locals():
+    if "key_state" in locals():
       return key_state
     else:
       Keyboard._Vars.error(
-          error_type='r', runtime_error='user32 returned a non "1" or "0" value'
+          error_type="r", runtime_error="user32 returned a non \"1\" or \"0\" value"
       )
       return Keyboard._Vars.exit_code
 
   @staticmethod
-  def locateCursor () -> Tuple[int, int]:
+  def locateCursor() -> Tuple[int, int]:
     """
     Returns a tuple of the current X & Y coordinates of the mouse
 
@@ -400,7 +406,7 @@ class Keyboard:
     return Keyboard.ManipulateMouse.getPosition()
 
   @staticmethod
-  def moveCursor (x: int, y: int) -> None:
+  def moveCursor(x: int, y: int) -> None:
     """
     Moves the cursor to a specific coordinate on the screen.
 
@@ -409,17 +415,17 @@ class Keyboard:
       y (int): The y-coordinate to be sent to user32
     """
     if not isinstance(x, int):
-      Keyboard._Vars.error(error_type='p', var='x', type='integer')
+      Keyboard._Vars.error(error_type="p", var="x", type="integer")
       return Keyboard._Vars.exit_code
     if not isinstance(y, int):
-      Keyboard._Vars.error(error_type='p', var='y', type='integer')
+      Keyboard._Vars.error(error_type="p", var="y", type="integer")
       return Keyboard._Vars.exit_code
 
     # The ManipulateMouse class also has a function for this
     Keyboard.ManipulateMouse.setPosition(x, y)
 
   @staticmethod
-  def scrollMouse (direction: str, amount: int, dx: int = 0, dy: int = 0) -> None:
+  def scrollMouse(direction: str, amount: int, dx: int = 0, dy: int = 0) -> None:
     """
     Scrolls mouse up, down, right and left by a certain amount
 
@@ -432,39 +438,39 @@ class Keyboard:
       dy (int, optional): The mouse's position on the y-axis
     """
     if not isinstance(direction, str):
-      Keyboard._Vars.error(error_type='p', var='direction', type='string')
+      Keyboard._Vars.error(error_type="p", var="direction", type="string")
       return Keyboard._Vars.exit_code
     if not isinstance(amount, int):
-      Keyboard._Vars.error(error_type='p', var='amount', type='integer')
+      Keyboard._Vars.error(error_type="p", var="amount", type="integer")
       return Keyboard._Vars.exit_code
     if not isinstance(dx, int):
-      Keyboard._Vars.error(error_type='p', var='dx', type='integer')
+      Keyboard._Vars.error(error_type="p", var="dx", type="integer")
       return Keyboard._Vars.exit_code
     if not isinstance(dy, int):
-      Keyboard._Vars.error(error_type='p', var='dy', type='integer')
+      Keyboard._Vars.error(error_type="p", var="dy", type="integer")
       return Keyboard._Vars.exit_code
 
-    direction_list: list = ['up', 'down', 'left', 'right']
+    direction_list: list = ["up", "down", "left", "right"]
     if direction not in direction_list:
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given direction is not valid')
+          error_type="r", runtime_error="given direction is not valid")
       return Keyboard._Vars.exit_code
     if amount < 1:
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given amount is less than 1')
+          error_type="r", runtime_error="given amount is less than 1")
       return Keyboard._Vars.exit_code
 
-    if direction == 'up':
-      Keyboard.mouseScroll('vertical', amount, dx, dy)
-    elif direction == 'down':
-      Keyboard.mouseScroll('vertical', -amount, dx, dy)
-    elif direction == 'right':
-      Keyboard.mouseScroll('horizontal', amount, dx, dy)
-    elif direction == 'left':
-      Keyboard.mouseScroll('horizontal', -amount, dx, dy)
+    if direction == "up":
+      Keyboard.mouseScroll("vertical", amount, dx, dy)
+    elif direction == "down":
+      Keyboard.mouseScroll("vertical", -amount, dx, dy)
+    elif direction == "right":
+      Keyboard.mouseScroll("horizontal", amount, dx, dy)
+    elif direction == "left":
+      Keyboard.mouseScroll("horizontal", -amount, dx, dy)
 
   @staticmethod
-  def pressMouse (mouse_button: str | int) -> None:
+  def pressMouse(mouse_button: str | int) -> None:
     """
     Presses a mouse button
 
@@ -479,7 +485,7 @@ class Keyboard:
     """
     if not isinstance(mouse_button, str | int):
       Keyboard._Vars.error(
-          error_type='p', var='mouse_button', type='integer or string')
+          error_type="p", var="mouse_button", type="integer or string")
       return Keyboard._Vars.exit_code
 
     mouse_list: list = [
@@ -488,14 +494,14 @@ class Keyboard:
     ]
     if mouse_button not in mouse_list and hex(mouse_button) not in mouse_list:
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not a mouse button')
+          error_type="r", runtime_error="given key code is not a mouse button")
       return Keyboard._Vars.exit_code
 
     if Keyboard._lookup(mouse_button) is not False:
       mouse_button: int = Keyboard._lookup(mouse_button)
     elif mouse_button not in Keyboard._Vars.vk_codes and mouse_button not in Keyboard._Vars.vk_codes.values():
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not valid')
+          error_type="r", runtime_error="given key code is not valid")
       return Keyboard._Vars.exit_code
 
     x: Keyboard.INPUT = Keyboard.INPUT(
@@ -508,7 +514,7 @@ class Keyboard:
     Keyboard._Vars.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
   @staticmethod
-  def releaseMouse (mouse_button: str | int) -> None:
+  def releaseMouse(mouse_button: str | int) -> None:
     """
     Releases a mouse button
 
@@ -523,7 +529,7 @@ class Keyboard:
     """
     if not isinstance(mouse_button, str | int):
       Keyboard._Vars.error(
-          error_type='p', var='mouse_button', type='integer or string')
+          error_type="p", var="mouse_button", type="integer or string")
       return Keyboard._Vars.exit_code
 
     mouse_list: list = [
@@ -532,7 +538,7 @@ class Keyboard:
     ]
     if mouse_button not in mouse_list and hex(mouse_button) not in mouse_list:
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not a mouse button'
+          error_type="r", runtime_error="given key code is not a mouse button"
       )
       return Keyboard._Vars.exit_code
 
@@ -540,7 +546,7 @@ class Keyboard:
       mouse_button: int = Keyboard._lookup(mouse_button)
     elif mouse_button not in Keyboard._Vars.vk_codes and mouse_button not in Keyboard._Vars.vk_codes.values():
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not valid')
+          error_type="r", runtime_error="given key code is not valid")
       return Keyboard._Vars.exit_code
 
     x: Keyboard.INPUT = Keyboard.INPUT(
@@ -550,7 +556,7 @@ class Keyboard:
     Keyboard._Vars.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
   @staticmethod
-  def pressKey (key_code: str | int) -> None:
+  def pressKey(key_code: str | int) -> None:
     """
     Presses a keyboard key
 
@@ -558,15 +564,15 @@ class Keyboard:
       key_code (str | int): All keys in vk_codes dict are valid
     """
     if not isinstance(key_code, str | int):
-      Keyboard._Vars.error(error_type='p', var='key_code',
-                           type='integer or string')
+      Keyboard._Vars.error(error_type="p", var="key_code",
+                           type="integer or string")
       return Keyboard._Vars.exit_code
 
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard._Vars.vk_codes and key_code not in Keyboard._Vars.vk_codes.values():
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not valid')
+          error_type="r", runtime_error="given key code is not valid")
       return Keyboard._Vars.exit_code
 
     x: Keyboard.INPUT = Keyboard.INPUT(
@@ -576,7 +582,7 @@ class Keyboard:
     Keyboard._Vars.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
   @staticmethod
-  def releaseKey (key_code: str | int) -> None:
+  def releaseKey(key_code: str | int) -> None:
     """
     Releases a keyboard key
 
@@ -584,15 +590,15 @@ class Keyboard:
       key_code (str | int): All keys in vk_codes dict are valid
     """
     if not isinstance(key_code, str | int):
-      Keyboard._Vars.error(error_type='p', var='key_code',
-                           type='integer or string')
+      Keyboard._Vars.error(error_type="p", var="key_code",
+                           type="integer or string")
       return Keyboard._Vars.exit_code
 
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard._Vars.vk_codes and key_code not in Keyboard._Vars.vk_codes.values():
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not valid')
+          error_type="r", runtime_error="given key code is not valid")
       return Keyboard._Vars.exit_code
 
     x: Keyboard.INPUT = Keyboard.INPUT(
@@ -605,7 +611,7 @@ class Keyboard:
     Keyboard._Vars.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
   @staticmethod
-  def pressAndReleaseKey (key_code: str | int) -> None:
+  def pressAndReleaseKey(key_code: str | int) -> None:
     """
     Presses and releases a keyboard key sequentially
 
@@ -613,22 +619,22 @@ class Keyboard:
       key_code (str | int): All keys in vk_codes dict are valid
     """
     if not isinstance(key_code, str | int):
-      Keyboard._Vars.error(error_type='p', var='key_code',
-                           type='integer or string')
+      Keyboard._Vars.error(error_type="p", var="key_code",
+                           type="integer or string")
       return Keyboard._Vars.exit_code
 
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard._Vars.vk_codes and key_code not in Keyboard._Vars.vk_codes.values():
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not valid')
+          error_type="r", runtime_error="given key code is not valid")
       return Keyboard._Vars.exit_code
 
     Keyboard.pressKey(key_code)
     Keyboard.releaseKey(key_code)
 
   @staticmethod
-  def pressAndReleaseMouse (mouse_button: str | int) -> None:
+  def pressAndReleaseMouse(mouse_button: str | int) -> None:
     """
     Presses and releases a mouse button sequentially
 
@@ -638,65 +644,79 @@ class Keyboard:
         right_mouse,
         middle_mouse,
         mouse_button1,
-        mouse_button
+        mouse_button2
       )
     """
     if not isinstance(mouse_button, str | int):
       Keyboard._Vars.error(
-          error_type='p', var='mouse_button', type='integer or string')
+          error_type="p", var="mouse_button", type="integer or string")
       return Keyboard._Vars.exit_code
 
-    mouse_list: list = [
-        "left_mouse", 0x01, "right_mouse", 0x02, "middle_mouse", 0x04,
-        "mouse_button1", 0x05, "mouse_button2", 0x06
-    ]
-    if mouse_button not in mouse_list and hex(mouse_button) not in mouse_list:
-      Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not a mouse button')
-      return Keyboard._Vars.exit_code
-    original_name: str = mouse_button  # Keeps the original string before reassignment
+    mouse_dict = {
+        "left_mouse": 0x01,
+        "right_mouse": 0x02,
+        "middle_mouse": 0x04,
+        "mouse_button1": 0x05,
+        "mouse_button2": 0x06
+    }
 
-    if Keyboard._lookup(mouse_button) is not False:
-      mouse_button: int = Keyboard._lookup(mouse_button)
-    elif mouse_button not in Keyboard._Vars.vk_codes and mouse_button not in Keyboard._Vars.vk_codes.values():
+    if isinstance(mouse_button, str):
+      if mouse_button not in mouse_dict:
+        Keyboard._Vars.error(
+            error_type="r", runtime_error="given key code is not a mouse button")
+        return Keyboard._Vars.exit_code
+      mouse_button_code = mouse_dict[mouse_button]
+    else:
+      if mouse_button not in mouse_dict.values():
+        Keyboard._Vars.error(
+            error_type="r", runtime_error="given key code is not a mouse button")
+        return Keyboard._Vars.exit_code
+      mouse_button_code = mouse_button
+
+    original_name = mouse_button if isinstance(mouse_button, str) else next(
+        key for key, value in mouse_dict.items() if value == mouse_button)
+
+    if Keyboard._lookup(mouse_button_code) is not False:
+      mouse_button_code = Keyboard._lookup(mouse_button_code)
+    elif mouse_button_code not in Keyboard._Vars.vk_codes and mouse_button_code not in Keyboard._Vars.vk_codes.values():
       Keyboard._Vars.error(
-          error_type='r', runtime_error='given key code is not valid')
+          error_type="r", runtime_error="given key code is not valid")
       return Keyboard._Vars.exit_code
 
     Keyboard.pressMouse(original_name)
     Keyboard.releaseMouse(original_name)
 
   @staticmethod
-  def keyboardWrite (source_str: str) -> None:
+  def keyboardWrite(source_str: str) -> None:
     """
     Writes by sending virtual inputs
 
     Args:
       source_str (str): The string to be inputted on the keyboard, all
-      keys in the 'Alphanumerical' section of vk_codes dict are valid
+      keys in the "Alphanumerical" section of vk_codes dict are valid
     """
     if not isinstance(source_str, str):
-      Keyboard._Vars.error(error_type='p', var='string', type='string')
+      Keyboard._Vars.error(error_type="p", var="string", type="string")
       return Keyboard._Vars.exit_code
 
     str_list: list = list(source_str)
     shift_alternate: list = [
-        '|', '~', '?', ':', '{', '}', '\"', '!', '@',
-        '#', '$', '%', '^', '&', '*', '(', ')', '+',
-        '<', '>', '_'
+        "|", "~", "?", ":", "{", "}", "\"", "!", "@",
+        "#", "$", "%", "^", "&", "*", "(", ")", "+",
+        "<", ">", "_"
     ]
     for char in str_list:
       if char not in Keyboard._Vars.vk_codes and not char.isupper():
         Keyboard._Vars.error(
-            error_type='r',
-            runtime_error=f'character: {char} is not in vk_codes map'
+            error_type="r",
+            runtime_error=f"character: {char} is not in vk_codes map"
         )
         return Keyboard._Vars.exit_code
 
       if char.isupper() or char in shift_alternate:
-        Keyboard.pressKey('shift')
+        Keyboard.pressKey("shift")
       else:
-        Keyboard.releaseKey('shift')
+        Keyboard.releaseKey("shift")
 
       # All dict entry's all lowercase
       key_code: int = Keyboard._lookup(char.lower())
@@ -714,17 +734,17 @@ class Keyboard:
           )
       )
       Keyboard._Vars.user32.SendInput(1, ctypes.byref(y), ctypes.sizeof(y))
-    Keyboard.releaseKey('shift')  # Incase it is not already released
+    Keyboard.releaseKey("shift")  # Incase it is not already released
 
   @staticmethod
-  def altTab () -> None:
+  def altTab() -> None:
     """
     My development test function, just opens alt-tab menu
     """
     # Here we use the value of alt and tab, so we can
     # test if the functions still take VK codes directly
-    Keyboard.pressKey(Keyboard._Vars.vk_codes['alt'])
-    Keyboard.pressKey(Keyboard._Vars.vk_codes['tab'])
-    Keyboard.releaseKey(Keyboard._Vars.vk_codes['tab'])
+    Keyboard.pressKey(Keyboard._Vars.vk_codes["alt"])
+    Keyboard.pressKey(Keyboard._Vars.vk_codes["tab"])
+    Keyboard.releaseKey(Keyboard._Vars.vk_codes["tab"])
     time.sleep(2)
-    Keyboard.releaseKey(Keyboard._Vars.vk_codes['alt'])
+    Keyboard.releaseKey(Keyboard._Vars.vk_codes["alt"])

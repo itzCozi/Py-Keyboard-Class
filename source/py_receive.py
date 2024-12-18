@@ -1,4 +1,5 @@
 # Test for receiving key and mouse events in Windows
+# TODO: Test on Windows, clean up, implement into py_key
 
 import ctypes
 from ctypes import wintypes

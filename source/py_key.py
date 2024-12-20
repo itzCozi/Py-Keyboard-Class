@@ -67,166 +67,166 @@ class Keyboard:
   # Reference: https://msdn.microsoft.com/en-us/library/dd375731
   # Each key value is 4 chars long and formatted in hexadecimal
   vk_codes: dict = {
-      # --------- Mouse ---------
-      "left_mouse":         0x01,
-      "right_mouse":        0x02,
-      "middle_mouse":       0x04,
-      "mouse_button1":      0x05,
-      "mouse_button2":      0x06,
-      # ----- Control Keys ------
-      "win":                0x5B,  # Left Windows key
-      "select":             0x29,
-      "pg_down":            0x21,
-      "pg_up":              0x22,
-      "end":                0x23,
-      "home":               0x24,
-      "insert":             0x2D,
-      "delete":             0x2E,
-      "back":               0x08,
-      "enter":              0x0D,
-      "shift":              0x10,
-      "ctrl":               0x11,
-      "alt":                0x12,
-      "caps":               0x14,
-      "escape":             0x1B,
-      "space":              0x20,
-      "tab":                0x09,
-      "sleep":              0x5F,
-      "zoom":               0xFB,
-      "num_lock":           0x90,
-      "scroll_lock":        0x91,
-      # ----- OEM Specific ------
-      "plus":               0xBB,
-      "comma":              0xBC,
-      "minus":              0xBD,
-      "period":             0xBE,
-      # -------- Media ----------
-      "vol_mute":           0xAD,
-      "vol_down":           0xAE,
-      "vol_up":             0xAF,
-      "next":               0xB0,
-      "prev":               0xB1,
-      "stop":               0xB2,
-      "pause_play":         0xB3,
-      # ------ Arrow Keys -------
-      "left":               0x25,
-      "up":                 0x26,
-      "right":              0x27,
-      "down":               0x28,
-      # ----- Function Keys -----
-      "f1":                 0x70,
-      "f2":                 0x71,
-      "f3":                 0x72,
-      "f4":                 0x73,
-      "f5":                 0x74,
-      "f6":                 0x75,
-      "f7":                 0x76,
-      "f8":                 0x77,
-      "f9":                 0x78,
-      "f10":                0x79,
-      "f11":                0x7A,
-      "f12":                0x7B,
-      "f13":                0x7C,
-      "f14":                0x7D,
-      "f15":                0x7E,
-      "f16":                0x7F,
-      "f17":                0x80,
-      "f18":                0x81,
-      "f19":                0x82,
-      "f20":                0x83,
-      "f21":                0x84,
-      "f22":                0x85,
-      "f23":                0x86,
-      "f24":                0x87,
-      # -------- Keypad ---------
-      "pad_0":              0x60,
-      "pad_1":              0x61,
-      "pad_2":              0x62,
-      "pad_3":              0x63,
-      "pad_4":              0x64,
-      "pad_5":              0x65,
-      "pad_6":              0x66,
-      "pad_7":              0x67,
-      "pad_8":              0x68,
-      "pad_9":              0x69,
-      # -------- Symbols --------
-      "multiply":           0x6A,
-      "add":                0x6B,
-      "separator":          0x6C,
-      "subtract":           0x6D,
-      "decimal":            0x6E,
-      "divide":             0x6F,
-      # ---- Alphanumerical -----
-      "0":                  0x30,
-      "1":                  0x31,
-      "2":                  0x32,
-      "3":                  0x33,
-      "4":                  0x34,
-      "5":                  0x35,
-      "6":                  0x36,
-      "7":                  0x37,
-      "8":                  0x38,
-      "9":                  0x39,
-      "a":                  0x41,
-      "b":                  0x42,
-      "c":                  0x43,
-      "d":                  0x44,
-      "e":                  0x45,
-      "f":                  0x46,
-      "g":                  0x47,
-      "h":                  0x48,
-      "i":                  0x49,
-      "j":                  0x4A,
-      "k":                  0x4B,
-      "l":                  0x4C,
-      "m":                  0x4D,
-      "n":                  0x4E,
-      "o":                  0x4F,
-      "p":                  0x50,
-      "q":                  0x51,
-      "r":                  0x52,
-      "s":                  0x53,
-      "t":                  0x54,
-      "u":                  0x55,
-      "v":                  0x56,
-      "w":                  0x57,
-      "x":                  0x58,
-      "y":                  0x59,
-      "z":                  0x5A,
-      "=":                  0x6B,
-      " ":                  0x20,
-      ".":                  0xBE,
-      ",":                  0xBC,
-      "-":                  0x6D,
-      "`":                  0xC0,
-      "/":                  0xBF,
-      ";":                  0xBA,
-      "[":                  0xDB,
-      "]":                  0xDD,
-      "_":                  0x6D,  # Shift
-      "|":                  0xDC,  # Shift
-      "~":                  0xC0,  # Shift
-      "?":                  0xBF,  # Shift
-      ":":                  0xBA,  # Shift
-      "<":                  0xBC,  # Shift
-      ">":                  0xBE,  # Shift
-      "{":                  0xDB,  # Shift
-      "}":                  0xDD,  # Shift
-      "!":                  0x31,  # Shift
-      "@":                  0x32,  # Shift
-      "#":                  0x33,  # Shift
-      "$":                  0x34,  # Shift
-      "%":                  0x35,  # Shift
-      "^":                  0x36,  # Shift
-      "&":                  0x37,  # Shift
-      "*":                  0x38,  # Shift
-      "(":                  0x39,  # Shift
-      ")":                  0x30,  # Shift
-      "+":                  0x6B,  # Shift
-      "\"":                 0xDE,  # Shift
-      "\'":                 0xDE,
-      "\\":                 0xDC,
-      "\n":                 0x0D
+    # --------- Mouse ---------
+    "left_mouse": 0x01,
+    "right_mouse": 0x02,
+    "middle_mouse": 0x04,
+    "mouse_button1": 0x05,
+    "mouse_button2": 0x06,
+    # ----- Control Keys ------
+    "win": 0x5B,  # Left Windows key
+    "select": 0x29,
+    "pg_down": 0x21,
+    "pg_up": 0x22,
+    "end": 0x23,
+    "home": 0x24,
+    "insert": 0x2D,
+    "delete": 0x2E,
+    "back": 0x08,
+    "enter": 0x0D,
+    "shift": 0x10,
+    "ctrl": 0x11,
+    "alt": 0x12,
+    "caps": 0x14,
+    "escape": 0x1B,
+    "space": 0x20,
+    "tab": 0x09,
+    "sleep": 0x5F,
+    "zoom": 0xFB,
+    "num_lock": 0x90,
+    "scroll_lock": 0x91,
+    # ----- OEM Specific ------
+    "plus": 0xBB,
+    "comma": 0xBC,
+    "minus": 0xBD,
+    "period": 0xBE,
+    # -------- Media ----------
+    "vol_mute": 0xAD,
+    "vol_down": 0xAE,
+    "vol_up": 0xAF,
+    "next": 0xB0,
+    "prev": 0xB1,
+    "stop": 0xB2,
+    "pause_play": 0xB3,
+    # ------ Arrow Keys -------
+    "left": 0x25,
+    "up": 0x26,
+    "right": 0x27,
+    "down": 0x28,
+    # ----- Function Keys -----
+    "f1": 0x70,
+    "f2": 0x71,
+    "f3": 0x72,
+    "f4": 0x73,
+    "f5": 0x74,
+    "f6": 0x75,
+    "f7": 0x76,
+    "f8": 0x77,
+    "f9": 0x78,
+    "f10": 0x79,
+    "f11": 0x7A,
+    "f12": 0x7B,
+    "f13": 0x7C,
+    "f14": 0x7D,
+    "f15": 0x7E,
+    "f16": 0x7F,
+    "f17": 0x80,
+    "f18": 0x81,
+    "f19": 0x82,
+    "f20": 0x83,
+    "f21": 0x84,
+    "f22": 0x85,
+    "f23": 0x86,
+    "f24": 0x87,
+    # -------- Keypad ---------
+    "pad_0": 0x60,
+    "pad_1": 0x61,
+    "pad_2": 0x62,
+    "pad_3": 0x63,
+    "pad_4": 0x64,
+    "pad_5": 0x65,
+    "pad_6": 0x66,
+    "pad_7": 0x67,
+    "pad_8": 0x68,
+    "pad_9": 0x69,
+    # -------- Symbols --------
+    "multiply": 0x6A,
+    "add": 0x6B,
+    "separator": 0x6C,
+    "subtract": 0x6D,
+    "decimal": 0x6E,
+    "divide": 0x6F,
+    # ---- Alphanumerical -----
+    "0": 0x30,
+    "1": 0x31,
+    "2": 0x32,
+    "3": 0x33,
+    "4": 0x34,
+    "5": 0x35,
+    "6": 0x36,
+    "7": 0x37,
+    "8": 0x38,
+    "9": 0x39,
+    "a": 0x41,
+    "b": 0x42,
+    "c": 0x43,
+    "d": 0x44,
+    "e": 0x45,
+    "f": 0x46,
+    "g": 0x47,
+    "h": 0x48,
+    "i": 0x49,
+    "j": 0x4A,
+    "k": 0x4B,
+    "l": 0x4C,
+    "m": 0x4D,
+    "n": 0x4E,
+    "o": 0x4F,
+    "p": 0x50,
+    "q": 0x51,
+    "r": 0x52,
+    "s": 0x53,
+    "t": 0x54,
+    "u": 0x55,
+    "v": 0x56,
+    "w": 0x57,
+    "x": 0x58,
+    "y": 0x59,
+    "z": 0x5A,
+    "=": 0x6B,
+    " ": 0x20,
+    ".": 0xBE,
+    ",": 0xBC,
+    "-": 0x6D,
+    "`": 0xC0,
+    "/": 0xBF,
+    ";": 0xBA,
+    "[": 0xDB,
+    "]": 0xDD,
+    "_": 0x6D,   # Shift
+    "|": 0xDC,   # Shift
+    "~": 0xC0,   # Shift
+    "?": 0xBF,   # Shift
+    ":": 0xBA,   # Shift
+    "<": 0xBC,   # Shift
+    ">": 0xBE,   # Shift
+    "{": 0xDB,   # Shift
+    "}": 0xDD,   # Shift
+    "!": 0x31,   # Shift
+    "@": 0x32,   # Shift
+    "#": 0x33,   # Shift
+    "$": 0x34,   # Shift
+    "%": 0x35,   # Shift
+    "^": 0x36,   # Shift
+    "&": 0x37,   # Shift
+    "*": 0x38,   # Shift
+    "(": 0x39,   # Shift
+    ")": 0x30,   # Shift
+    "+": 0x6B,   # Shift
+    "\"": 0xDE,  # Shift
+    "\'": 0xDE,
+    "\\": 0xDC,
+    "\n": 0x0D
   }
 
   # C struct declarations, recently added type hinting
@@ -235,34 +235,34 @@ class Keyboard:
 
   class MOUSEINPUT(ctypes.Structure):
     _fields_: tuple[
-        tuple[Literal["dx"], wintypes.LONG],                  # A
-        tuple[Literal["dy"], wintypes.LONG],                  # B
-        tuple[Literal["mouseData"], wintypes.DWORD],          # C
-        tuple[Literal["dwFlags"], wintypes.DWORD],            # D
-        tuple[Literal["time"], wintypes.DWORD],               # E
-        tuple[Literal["dwExtraInfo"], type[wintypes.WPARAM]]  # F
+      tuple[Literal["dx"], wintypes.LONG],                  # A
+      tuple[Literal["dy"], wintypes.LONG],                  # B
+      tuple[Literal["mouseData"], wintypes.DWORD],          # C
+      tuple[Literal["dwFlags"], wintypes.DWORD],            # D
+      tuple[Literal["time"], wintypes.DWORD],               # E
+      tuple[Literal["dwExtraInfo"], type[wintypes.WPARAM]]  # F
     ] = (
-        ("dx", wintypes.LONG),                                # A
-        ("dy", wintypes.LONG),                                # B
-        ("mouseData", wintypes.DWORD),                        # C
-        ("dwFlags", wintypes.DWORD),                          # D
-        ("time", wintypes.DWORD),                             # E
-        ("dwExtraInfo", wintypes.ULONG_PTR)                   # F
+      ("dx", wintypes.LONG),                                # A
+      ("dy", wintypes.LONG),                                # B
+      ("mouseData", wintypes.DWORD),                        # C
+      ("dwFlags", wintypes.DWORD),                          # D
+      ("time", wintypes.DWORD),                             # E
+      ("dwExtraInfo", wintypes.ULONG_PTR)                   # F
     )
 
   class KEYBDINPUT(ctypes.Structure):
     _fields_: tuple[
-        tuple[Literal["wVk"], wintypes.WORD],                 # A
-        tuple[Literal["wScan"], wintypes.WORD],               # B
-        tuple[Literal["dwFlags"], wintypes.DWORD],            # C
-        tuple[Literal["time"], wintypes.DWORD],               # D
-        tuple[Literal["dwExtraInfo"], type[wintypes.WPARAM]]  # E
+      tuple[Literal["wVk"], wintypes.WORD],                 # A
+      tuple[Literal["wScan"], wintypes.WORD],               # B
+      tuple[Literal["dwFlags"], wintypes.DWORD],            # C
+      tuple[Literal["time"], wintypes.DWORD],               # D
+      tuple[Literal["dwExtraInfo"], type[wintypes.WPARAM]]  # E
     ] = (
-        ("wVk", wintypes.WORD),                               # A
-        ("wScan", wintypes.WORD),                             # B
-        ("dwFlags", wintypes.DWORD),                          # C
-        ("time", wintypes.DWORD),                             # D
-        ("dwExtraInfo", wintypes.ULONG_PTR)                   # E
+      ("wVk", wintypes.WORD),                               # A
+      ("wScan", wintypes.WORD),                             # B
+      ("dwFlags", wintypes.DWORD),                          # C
+      ("time", wintypes.DWORD),                             # D
+      ("dwExtraInfo", wintypes.ULONG_PTR)                   # E
     )
 
     def __init__(
@@ -274,21 +274,21 @@ class Keyboard:
       super(KEYBDINPUT, this).__init__(*args, **kwds)
       if not this.dwFlags & Keyboard.KEYEVENTF_UNICODE:
         this.wScan: Any = Keyboard.user32.MapVirtualKeyExW(
-            this.wVk, Keyboard.MAPVK_VK_TO_VSC, 0
+          this.wVk, Keyboard.MAPVK_VK_TO_VSC, 0
         )
 
   class INPUT(ctypes.Structure):
 
     class _INPUT(ctypes.Union):
       _fields_: tuple[
-          tuple[Literal["ki"], type[KEYBDINPUT]],
-          tuple[Literal["mi"], type[MOUSEINPUT]]
+        tuple[Literal["ki"], type[KEYBDINPUT]],
+        tuple[Literal["mi"], type[MOUSEINPUT]]
       ] = (("ki", KEYBDINPUT), ("mi", MOUSEINPUT))
 
     _anonymous_: tuple[Literal["_input"]] = ("_input",)
     _fields_: tuple[
-        tuple[Literal["type"], wintypes.DWORD],
-        tuple[Literal["_input"], type[_INPUT]]
+      tuple[Literal["type"], wintypes.DWORD],
+      tuple[Literal["_input"], type[_INPUT]]
     ] = (("type", wintypes.DWORD), ("_input", _INPUT))
 
   LPINPUT: Any = ctypes.POINTER(INPUT)
@@ -351,9 +351,9 @@ class Keyboard:
   # Type annotation not supported
   user32.SendInput.errcheck = _checkCount
   user32.SendInput.argtypes = (
-      wintypes.UINT,    # nInputs
-      LPINPUT,          # pInputs
-      ctypes.c_int      # cbSize
+    wintypes.UINT,  # nInputs
+    LPINPUT,        # pInputs
+    ctypes.c_int    # cbSize
   )
 
   # Functions (most people will only use these)
@@ -371,14 +371,14 @@ class Keyboard:
     """
     if not isinstance(key_code, str | int):
       Keyboard.error(error_type="p", var="key_code",
-                           type="integer or string")
+                     type="integer or string")
       return Keyboard.exit_code
 
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard.vk_codes and key_code not in Keyboard.vk_codes.values():
       Keyboard.error(
-          error_type="r", runtime_error="given key code is not valid")
+        error_type="r", runtime_error="given key code is not valid")
       return Keyboard.exit_code
 
     integer_state: int = Keyboard.user32.GetKeyState(key_code)
@@ -388,7 +388,7 @@ class Keyboard:
       return key_state
     else:
       Keyboard.error(
-          error_type="r", runtime_error="user32 returned a non \"1\" or \"0\" value"
+        error_type="r", runtime_error="user32 returned a non \"1\" or \"0\" value"
       )
       return Keyboard.exit_code
 
@@ -452,11 +452,11 @@ class Keyboard:
     direction_list: list = ["up", "down", "left", "right"]
     if direction not in direction_list:
       Keyboard.error(
-          error_type="r", runtime_error="given direction is not valid")
+        error_type="r", runtime_error="given direction is not valid")
       return Keyboard.exit_code
     if amount < 1:
       Keyboard.error(
-          error_type="r", runtime_error="given amount is less than 1")
+        error_type="r", runtime_error="given amount is less than 1")
       return Keyboard.exit_code
 
     if direction == "up":
@@ -484,31 +484,31 @@ class Keyboard:
     """
     if not isinstance(mouse_button, str | int):
       Keyboard.error(
-          error_type="p", var="mouse_button", type="integer or string")
+        error_type="p", var="mouse_button", type="integer or string")
       return Keyboard.exit_code
 
     mouse_list: list = [
-        "left_mouse", 0x01, "right_mouse", 0x02, "middle_mouse", 0x04,
-        "mouse_button1", 0x05, "mouse_button2", 0x06
+      "left_mouse", 0x01, "right_mouse", 0x02, "middle_mouse", 0x04,
+      "mouse_button1", 0x05, "mouse_button2", 0x06
     ]
     if mouse_button not in mouse_list and hex(mouse_button) not in mouse_list:
       Keyboard.error(
-          error_type="r", runtime_error="given key code is not a mouse button")
+        error_type="r", runtime_error="given key code is not a mouse button")
       return Keyboard.exit_code
 
     if Keyboard._lookup(mouse_button) is not False:
       mouse_button: int = Keyboard._lookup(mouse_button)
     elif mouse_button not in Keyboard.vk_codes and mouse_button not in Keyboard.vk_codes.values():
       Keyboard.error(
-          error_type="r", runtime_error="given key code is not valid")
+        error_type="r", runtime_error="given key code is not valid")
       return Keyboard.exit_code
 
     x: Keyboard.INPUT = Keyboard.INPUT(
-        type=Keyboard.INPUT_MOUSE,
-        mi=MOUSEINPUT(
-            wVk=mouse_button,
-            dwFlags=Keyboard.KEYEVENTF_KEYUP
-        )
+      type=Keyboard.INPUT_MOUSE,
+      mi=MOUSEINPUT(
+        wVk=mouse_button,
+        dwFlags=Keyboard.KEYEVENTF_KEYUP
+      )
     )
     Keyboard.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
@@ -528,16 +528,16 @@ class Keyboard:
     """
     if not isinstance(mouse_button, str | int):
       Keyboard.error(
-          error_type="p", var="mouse_button", type="integer or string")
+        error_type="p", var="mouse_button", type="integer or string")
       return Keyboard.exit_code
 
     mouse_list: list = [
-        "left_mouse", 0x01, "right_mouse", 0x02, "middle_mouse", 0x04,
-        "mouse_button1", 0x05, "mouse_button2", 0x06
+      "left_mouse", 0x01, "right_mouse", 0x02, "middle_mouse", 0x04,
+      "mouse_button1", 0x05, "mouse_button2", 0x06
     ]
     if mouse_button not in mouse_list and hex(mouse_button) not in mouse_list:
       Keyboard.error(
-          error_type="r", runtime_error="given key code is not a mouse button"
+        error_type="r", runtime_error="given key code is not a mouse button"
       )
       return Keyboard.exit_code
 
@@ -545,12 +545,12 @@ class Keyboard:
       mouse_button: int = Keyboard._lookup(mouse_button)
     elif mouse_button not in Keyboard.vk_codes and mouse_button not in Keyboard.vk_codes.values():
       Keyboard.error(
-          error_type="r", runtime_error="given key code is not valid")
+        error_type="r", runtime_error="given key code is not valid")
       return Keyboard.exit_code
 
     x: Keyboard.INPUT = Keyboard.INPUT(
-        type=Keyboard.INPUT_MOUSE,
-        mi=MOUSEINPUT(wVk=mouse_button)
+      type=Keyboard.INPUT_MOUSE,
+      mi=MOUSEINPUT(wVk=mouse_button)
     )
     Keyboard.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
@@ -564,19 +564,19 @@ class Keyboard:
     """
     if not isinstance(key_code, str | int):
       Keyboard.error(error_type="p", var="key_code",
-                           type="integer or string")
+                     type="integer or string")
       return Keyboard.exit_code
 
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard.vk_codes and key_code not in Keyboard.vk_codes.values():
       Keyboard.error(
-          error_type="r", runtime_error="given key code is not valid")
+        error_type="r", runtime_error="given key code is not valid")
       return Keyboard.exit_code
 
     x: Keyboard.INPUT = Keyboard.INPUT(
-        type=Keyboard.INPUT_KEYBOARD,
-        ki=KEYBDINPUT(wVk=key_code)
+      type=Keyboard.INPUT_KEYBOARD,
+      ki=KEYBDINPUT(wVk=key_code)
     )
     Keyboard.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
@@ -590,22 +590,22 @@ class Keyboard:
     """
     if not isinstance(key_code, str | int):
       Keyboard.error(error_type="p", var="key_code",
-                           type="integer or string")
+                     type="integer or string")
       return Keyboard.exit_code
 
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard.vk_codes and key_code not in Keyboard.vk_codes.values():
       Keyboard.error(
-          error_type="r", runtime_error="given key code is not valid")
+        error_type="r", runtime_error="given key code is not valid")
       return Keyboard.exit_code
 
     x: Keyboard.INPUT = Keyboard.INPUT(
-        type=Keyboard.INPUT_KEYBOARD,
-        ki=KEYBDINPUT(
-            wVk=key_code,
-            dwFlags=Keyboard.KEYEVENTF_KEYUP
-        )
+      type=Keyboard.INPUT_KEYBOARD,
+      ki=KEYBDINPUT(
+        wVk=key_code,
+        dwFlags=Keyboard.KEYEVENTF_KEYUP
+      )
     )
     Keyboard.user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
@@ -619,14 +619,14 @@ class Keyboard:
     """
     if not isinstance(key_code, str | int):
       Keyboard.error(error_type="p", var="key_code",
-                           type="integer or string")
+                     type="integer or string")
       return Keyboard.exit_code
 
     if Keyboard._lookup(key_code) is not False:
       key_code: int = Keyboard._lookup(key_code)
     elif key_code not in Keyboard.vk_codes and key_code not in Keyboard.vk_codes.values():
       Keyboard.error(
-          error_type="r", runtime_error="given key code is not valid")
+        error_type="r", runtime_error="given key code is not valid")
       return Keyboard.exit_code
 
     Keyboard.pressKey(key_code)
@@ -648,38 +648,38 @@ class Keyboard:
     """
     if not isinstance(mouse_button, str | int):
       Keyboard.error(
-          error_type="p", var="mouse_button", type="integer or string")
+        error_type="p", var="mouse_button", type="integer or string")
       return Keyboard.exit_code
 
     mouse_dict: dict[str, int] = {
-        "left_mouse": 0x01,
-        "right_mouse": 0x02,
-        "middle_mouse": 0x04,
-        "mouse_button1": 0x05,
-        "mouse_button2": 0x06
+      "left_mouse": 0x01,
+      "right_mouse": 0x02,
+      "middle_mouse": 0x04,
+      "mouse_button1": 0x05,
+      "mouse_button2": 0x06
     }
 
     if isinstance(mouse_button, str):
       if mouse_button not in mouse_dict:
         Keyboard.error(
-            error_type="r", runtime_error="given key code is not a mouse button")
+          error_type="r", runtime_error="given key code is not a mouse button")
         return Keyboard.exit_code
       mouse_button_code: int = mouse_dict[mouse_button]
     else:
       if mouse_button not in mouse_dict.values():
         Keyboard.error(
-            error_type="r", runtime_error="given key code is not a mouse button")
+          error_type="r", runtime_error="given key code is not a mouse button")
         return Keyboard.exit_code
       mouse_button_code: int = mouse_button
 
     original_name: str = mouse_button if isinstance(mouse_button, str) else next(
-        key for key, value in mouse_dict.items() if value == mouse_button)
+      key for key, value in mouse_dict.items() if value == mouse_button)
 
     if Keyboard._lookup(mouse_button_code) is not False:
       mouse_button_code: int | bool = Keyboard._lookup(mouse_button_code)
     elif mouse_button_code not in Keyboard.vk_codes and mouse_button_code not in Keyboard.vk_codes.values():
       Keyboard.error(
-          error_type="r", runtime_error="given key code is not valid")
+        error_type="r", runtime_error="given key code is not valid")
       return Keyboard.exit_code
 
     Keyboard.pressMouse(original_name)
@@ -697,7 +697,7 @@ class Keyboard:
     if not isinstance(source_str, str):
       Keyboard.error(error_type="p", var="string", type="string")
       return Keyboard.exit_code
-  
+
     shift_alternate: set[str] = set("|~?:{}\"!@#$%^&*()_+<>")
     for char in source_str:
       if char not in Keyboard.vk_codes and not char.isupper():

@@ -273,15 +273,15 @@ class Keyboard:
     )
 
     def __init__(
-        self: Self,
+        this: Self,
         *args: tuple[Any, ...],
         **kwds: dict[str, Any]
     ) -> None:
       # *args & **kwds are confusing asf: https://youtu.be/4jBJhCaNrWU
-      super(KEYBDINPUT, self).__init__(*args, **kwds)
-      if not self.dwFlags & Keyboard._Vars.KEYEVENTF_UNICODE:
-        self.wScan: Any = Keyboard._Vars.user32.MapVirtualKeyExW(
-            self.wVk, Keyboard._Vars.MAPVK_VK_TO_VSC, 0
+      super(KEYBDINPUT, this).__init__(*args, **kwds)
+      if not this.dwFlags & Keyboard._Vars.KEYEVENTF_UNICODE:
+        this.wScan: Any = Keyboard._Vars.user32.MapVirtualKeyExW(
+            this.wVk, Keyboard._Vars.MAPVK_VK_TO_VSC, 0
         )
 
   class INPUT(ctypes.Structure):
